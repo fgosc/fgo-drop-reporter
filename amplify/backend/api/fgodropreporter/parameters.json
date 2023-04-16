@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "fgodropreporter",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authfgodropreporter8b1dc78a",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
