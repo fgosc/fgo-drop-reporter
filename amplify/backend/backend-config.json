@@ -1,5 +1,27 @@
 {
   "api": {
+    "AdminQueries": {
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fgodropreporter"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries7751f16c"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "fgodropreporter": {
       "dependsOn": [
         {
@@ -7,7 +29,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "fgodropreporter8b1dc78a"
+          "resourceName": "fgodropreporter"
         }
       ],
       "output": {
@@ -15,9 +37,9 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2024-04-15T11:47:41.670Z",
+                "apiKeyExpirationDate": "2024-04-17T11:06:54.048Z",
                 "apiKeyExpirationDays": 365,
-                "description": "public GraphQL access"
+                "description": "for public access"
               },
               "authenticationType": "API_KEY"
             }
@@ -25,7 +47,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authfgodropreporter8b1dc78a"
+              "userPoolId": "authfgodropreporter"
             }
           }
         }
@@ -35,7 +57,7 @@
     }
   },
   "auth": {
-    "fgodropreporter8b1dc78a": {
+    "fgodropreporter": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -68,15 +90,48 @@
           "attributes": [
             "UserPoolId",
             "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
+            "AppClientID"
           ],
           "category": "auth",
-          "resourceName": "fgodropreporter8b1dc78a"
+          "resourceName": "fgodropreporter"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "Cognito-UserPool-Groups"
+    }
+  },
+  "function": {
+    "AdminQueries7751f16c": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fgodropreporter"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_AdminQueries7751f16c_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7751f16c"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries7751f16c_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7751f16c"
+        }
+      ]
     }
   }
 }

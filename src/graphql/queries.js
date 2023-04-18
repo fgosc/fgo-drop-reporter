@@ -5,6 +5,7 @@ export const getReport = /* GraphQL */ `
   query GetReport($id: ID!) {
     getReport(id: $id) {
       id
+      owner
       type
       warName
       questName
@@ -23,7 +24,6 @@ export const getReport = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -36,6 +36,7 @@ export const listReports = /* GraphQL */ `
     listReports(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         type
         warName
         questName
@@ -50,7 +51,6 @@ export const listReports = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

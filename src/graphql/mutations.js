@@ -8,6 +8,7 @@ export const updateReport = /* GraphQL */ `
   ) {
     updateReport(input: $input, condition: $condition) {
       id
+      owner
       type
       warName
       questName
@@ -26,7 +27,6 @@ export const updateReport = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -37,6 +37,7 @@ export const deleteReport = /* GraphQL */ `
   ) {
     deleteReport(input: $input, condition: $condition) {
       id
+      owner
       type
       warName
       questName
@@ -55,7 +56,6 @@ export const deleteReport = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -66,6 +66,7 @@ export const createReport = /* GraphQL */ `
   ) {
     createReport(input: $input, condition: $condition) {
       id
+      owner
       type
       warName
       questName
@@ -84,7 +85,6 @@ export const createReport = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;

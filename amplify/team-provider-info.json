@@ -13,10 +13,17 @@
     },
     "categories": {
       "auth": {
-        "fgodropreporter8b1dc78a": {},
+        "fgodropreporter": {},
         "userPoolGroups": {}
       },
+      "function": {
+        "AdminQueries7751f16c": {
+          "deploymentBucketName": "amplify-fgodropreporter-staging-112936-deployment",
+          "s3Key": "amplify-builds/AdminQueries7751f16c-34714a2b787269677470-build.zip"
+        }
+      },
       "api": {
+        "AdminQueries": {},
         "fgodropreporter": {}
       }
     }
