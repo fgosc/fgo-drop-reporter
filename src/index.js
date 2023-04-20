@@ -1,5 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
+import { ChakraProvider } from "@chakra-ui/react";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -7,22 +8,20 @@ import reportWebVitals from "./reportWebVitals";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
 // 既存の API Gateway を追加
-config.API = {
-  endpoints: [
-    {
-      name: "twitter",
-      endpoint:
-        "https://4j8usr5oma.execute-api.ap-northeast-1.amazonaws.com/prod",
-    },
-  ],
-};
+config.aws_cloud_logic_custom.push({
+  name: "twitter",
+  endpoint: "https://4j8usr5oma.execute-api.ap-northeast-1.amazonaws.com/prod",
+  region: "ap-northeast-1",
+});
 Amplify.configure(config);
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root"))
+root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
+  </React.StrictMode>,  
 );
 
 // If you want to start measuring performance in your app, pass a function

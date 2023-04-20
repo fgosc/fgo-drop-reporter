@@ -1,7 +1,9 @@
 import { Authenticator } from "@aws-amplify/ui-react";
+import { Box, Button, Grid, GridItem, Heading } from "@chakra-ui/react"
 import "@aws-amplify/ui-react/styles.css";
 import { API, Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
+import { EditBox } from "./component";
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
@@ -72,23 +74,53 @@ function TwitterAccount(props) {
   }
 
   return (
-    <div>
-      <button onClick={handleClick}>Twitter 連携</button>
-    </div>
+    <Box>
+      <Button colorScheme="twitter" onClick={handleClick}>Twitter 連携</Button>
+    </Box>
   );
+}
+
+function AppContainer() {
+  const lines = []
+  return (
+    <Grid
+      templateAreas={`"header header"
+                  "main main"
+                  "footer footer"`}
+      gridTemplateRows={'50px 1fr 30px'}
+      gridTemplateColumns={'150px 1fr'}
+      h='200px'
+      gap='1'
+      color='blackAlpha.800'
+      fontWeight='bold'
+      maxWidth='800px'
+      margin='auto'
+    >
+      <GridItem pl='2' area={'header'}>
+        <Heading>FGO 周回報告</Heading>
+      </GridItem>
+      <GridItem pl='2' area={'main'}>
+        <Authenticator>
+          {({ signOut, user }) => (
+            <>
+              <h1>Hello {user.username}</h1>
+              <UserAttributes />
+              <TwitterAccount />
+              <EditBox questname="" runcount="0" lines={lines} />
+              <Button mt={1} onClick={signOut}>Sign out</Button>
+            </>
+          )}
+        </Authenticator>
+      </GridItem>
+      <GridItem pl='2' area={'footer'}>
+        fgosc project
+      </GridItem>
+    </Grid>
+  )
 }
 
 export default function App() {
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <main>
-          <h1>Hello {user.username}</h1>
-          <UserAttributes />
-          <TwitterAccount />
-          <button onClick={signOut}>Sign out</button>
-        </main>
-      )}
-    </Authenticator>
+    <AppContainer />
   );
 }
