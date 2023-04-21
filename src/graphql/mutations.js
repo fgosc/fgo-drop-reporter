@@ -9,6 +9,10 @@ export const updateReport = /* GraphQL */ `
     updateReport(input: $input, condition: $condition) {
       id
       owner
+      name
+      twitter_id
+      twitter_name
+      twitter_username
       type
       warName
       questName
@@ -38,6 +42,10 @@ export const deleteReport = /* GraphQL */ `
     deleteReport(input: $input, condition: $condition) {
       id
       owner
+      name
+      twitter_id
+      twitter_name
+      twitter_username
       type
       warName
       questName
@@ -67,6 +75,10 @@ export const createReport = /* GraphQL */ `
     createReport(input: $input, condition: $condition) {
       id
       owner
+      name
+      twitter_id
+      twitter_name
+      twitter_username
       type
       warName
       questName

@@ -9,6 +9,10 @@ export const onCreateReport = /* GraphQL */ `
     onCreateReport(filter: $filter, owner: $owner) {
       id
       owner
+      name
+      twitter_id
+      twitter_name
+      twitter_username
       type
       warName
       questName
@@ -38,6 +42,10 @@ export const onUpdateReport = /* GraphQL */ `
     onUpdateReport(filter: $filter, owner: $owner) {
       id
       owner
+      name
+      twitter_id
+      twitter_name
+      twitter_username
       type
       warName
       questName
@@ -67,6 +75,10 @@ export const onDeleteReport = /* GraphQL */ `
     onDeleteReport(filter: $filter, owner: $owner) {
       id
       owner
+      name
+      twitter_id
+      twitter_name
+      twitter_username
       type
       warName
       questName
