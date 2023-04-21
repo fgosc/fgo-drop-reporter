@@ -4,52 +4,99 @@ import { createReport } from "../../../graphql/mutations";
 import { Box, Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 
-const reportData = {
-  type: "event",
-  warName: "冬木",
-  questName: "未確認座標X-A",
-  timestamp: Math.floor(Date.now() / 1000),
-  runs: 100,
-  url: "https://fgojunks.max747.org/fgosccnt/results/9fb16ceb-6af8-4711-9f06-5efa3d42e1f5/",
-  dropObjects: [
-    {
-      objectName: "骨",
-      drops: [
-        {
-          num: 8,
-        },
-      ],
-      dropUpRate: 0,
-    },
-    {
-      objectName: "剣輝",
-      drops: [
-        {
-          num: 13,
-        },
-      ],
-    },
-    {
-      objectName: "剣灯火",
-      drops: [
-        {
-          num: 13,
-        },
-      ],
-    },
-    {
-      objectName: "QP",
-      drops: [
-        {
-          num: 61,
-          stack: 10000,
-        },
-      ],
-    },
-  ],
-};
+function createReportJSON(questname, runcount, lines) {
+  const normalWarNames = [
+    "冬木",
+    "オルレアン",
+    "セプテム",
+    "オケアノス",
+    "ロンドン",
+    "北米",
+    "キャメロット",
+    "バビロニア",
+    "新宿",
+    "アガルタ",
+    "下総国",
+    "セイレム",
+    "アナスタシア",
+    "ゲッテルデメルング",
+    "シン",
+    "ユガ・クシェートラ",
+    "アトランティス",
+    "オリュンポス",
+    "平安京",
+    "アヴァロン",
+    "トラオム",
+    "ナウイ・ミクトラン",
+  ];
 
-export const ReportButton = memo(() => {
+  const spaceIndex = questname.indexOf(" ");
+  let warName, questName;
+  if (spaceIndex === -1) {
+    warName = null;
+    questName = questname;
+  } else {
+    [warName, questName] = questname.split(" ");
+  }
+
+  const runs = runcount;
+  const timestamp = Math.floor(new Date().getTime() / 1000);
+  const type = normalWarNames.includes(warName) ? "normal" : "event";
+
+  const dropObjectsMap = new Map();
+
+  for (const { material, report } of lines) {
+    // materialが空文字列の場合は無視する
+    if (material === "") {
+      continue;
+    }
+    const regex = /(\(x|\(\+)(\d+)\)/;
+    const match = material.match(regex);
+
+    let stack = null;
+    if (match) {
+      material = material.replace(regex, "").trim();
+      stack = parseInt(match[2], 10);
+    }
+
+    const drop = {
+      num: report,
+      stack,
+    };
+
+    if (dropObjectsMap.has(material)) {
+      dropObjectsMap.get(material).push(drop);
+    } else {
+      dropObjectsMap.set(material, [drop]);
+    }
+  }
+
+  const dropObjects = Array.from(dropObjectsMap.entries()).map(
+    ([objectName, drops]) => {
+      return {
+        objectName,
+        drops,
+        bonus: null,
+        dropUpRate: null,
+      };
+    }
+  );
+
+  return {
+    type,
+    warName,
+    questName,
+    timestamp,
+    runs,
+    url: null,
+    memo: null,
+    dropObjects,
+  };
+}
+
+export const ReportButton = memo((props) => {
+  const { questname, runcount, lines } = props;
+
   const toast = useToast();
 
   async function AddReport(report) {
@@ -78,6 +125,8 @@ export const ReportButton = memo(() => {
   }
 
   const handleClick = () => {
+    const reportData = createReportJSON(questname, runcount, lines);
+    console.log(reportData);
     AddReport(reportData);
   };
 
