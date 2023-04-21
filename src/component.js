@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Box, Button, Text, Textarea, Tag, HStack } from "@chakra-ui/react";
 import {
   FormLabel,
@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
+import { ReportButton } from "./components/atoms/button/ReportButton";
 
 const defaultQuestName = "(クエスト名)";
 
@@ -869,6 +870,7 @@ ${reportText}
         />
         <Box mt={1}>{this.makeReportTable()}</Box>
         <ReportViewer {...this.state} />
+        <ReportButton {...this.state} />
         <TweetButton
           {...this.state}
           onShowTweetButton={this.handleShowTweetButton}
