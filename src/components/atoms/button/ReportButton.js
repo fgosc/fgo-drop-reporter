@@ -31,12 +31,17 @@ function createReportJSON(questname, runcount, lines) {
   ];
 
   const spaceIndex = questname.indexOf(" ");
-  let warName, questName;
-  if (spaceIndex === -1) {
-    warName = null;
-    questName = questname;
-  } else {
-    [warName, questName] = questname.split(" ");
+  let warName = null;
+  let questName = questname;
+
+  // questname が normalWarNames + " " で始まる場合、" " で分割して warName と questName を設定
+  for (const normalWarName of normalWarNames) {
+    if (questname.startsWith(normalWarName + " ")) {
+      const splitQuestName = questname.split(" ");
+      warName = splitQuestName[0];
+      questName = splitQuestName.slice(1).join(" ");
+      break;
+    }
   }
 
   const runs = runcount;
