@@ -83,7 +83,38 @@ function TwitterAccount(props) {
 }
 
 function AppContainer() {
-  const lines = [];
+  const [questname, setQuestname] = useState("");
+  const [runs, setRuns] = useState(0);
+  const [lines, setLines] = useState([]);
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    console.log(`queryString: ${queryString}`);
+    const searchParams = new URLSearchParams(queryString);
+    const initParams = ((searchParams) => {
+      if (!searchParams.has("p")) {
+        return {
+          questname: "",
+          runs: 0,
+          lines: [],
+        };
+      }
+      const byteArray = new Uint8Array(
+        window
+          .atob(searchParams.get("p"))
+          .split("")
+          .map((c) => c.charCodeAt(0))
+      );
+      const decoder = new TextDecoder();
+      const decodedParams = decoder.decode(byteArray);
+      console.log(`decodedParams: ${decodedParams}`);
+      return JSON.parse(decodedParams);
+    })(searchParams);
+    setQuestname(initParams.questname);
+    setRuns(initParams.runs);
+    setLines(initParams.lines);
+  }, []);
+
   return (
     <Grid
       templateAreas={`"header header"
@@ -108,7 +139,7 @@ function AppContainer() {
               <h1>Hello {user.username}</h1>
               <UserAttributes />
               <TwitterAccount />
-              <EditBox questname="" runcount="0" lines={lines} />
+              <EditBox questname={questname} runs={runs} lines={lines} />
               <Button mt={1} onClick={signOut}>
                 Sign out
               </Button>
