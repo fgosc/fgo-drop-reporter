@@ -1,5 +1,5 @@
 import React from "react";
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import "./index.css";
 import App from "./App";
@@ -15,13 +15,13 @@ config.aws_cloud_logic_custom.push({
 });
 Amplify.configure(config);
 
-const root = createRoot(document.getElementById("root"))
+const root = createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
       <App />
     </ChakraProvider>
-  </React.StrictMode>,  
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
