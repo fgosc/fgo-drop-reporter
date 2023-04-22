@@ -8,7 +8,7 @@ const MainContent = ({ signOut, questname, runs, lines, note }) => {
     <>
       <UserGreeting />
       <TwitterAccount />
-      <EditBox questname={questname} runs={runs} lines={lines} note={note} />
+      <EditBox questname={questname} runcount={runs} lines={lines} note={note} />
       <SignOutButton onClick={signOut} />
     </>
   );

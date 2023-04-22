@@ -45,7 +45,7 @@ class EditBox extends React.Component {
     this.minimumLines = 5;
 
     const questname = props.questname || "";
-    const runcount = props.runs || 0;
+    const runcount = props.runcount || 0;
     const note = props.note || "";
     this.state = {
       questname: questname,
@@ -132,7 +132,6 @@ class EditBox extends React.Component {
           maxOrder++;
         }
       }
-      console.log("newlines", newlines);
       this.setState((state) => ({
         questname: this.props.questname,
         runcount: this.props.runcount,

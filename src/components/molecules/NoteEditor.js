@@ -2,7 +2,6 @@ import { Box, Text, Textarea } from "@chakra-ui/react";
 
 function NoteEditor(props) {
     const handleChange = (event) => {
-        console.log(props)
         props.onNoteChange(event.target.value);
     }
     return (
