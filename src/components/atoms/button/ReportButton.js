@@ -90,7 +90,7 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
 
   console.log(userAttributes);
   return {
-    user: userAttributes.name,
+    name: userAttributes.name,
     type,
     warName,
     questName,
@@ -105,7 +105,6 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
 export const ReportButton = memo((props) => {
   const { questname, runcount, lines } = props;
   const userAttributes = useContext(UserAttributesContext);
-  //   console.log(userAttributes);
 
   const toast = useToast();
 
@@ -142,7 +141,7 @@ export const ReportButton = memo((props) => {
       userAttributes
     );
     console.log(reportData);
-    // AddReport(reportData);
+    AddReport(reportData);
   };
 
   const reportButton = (
