@@ -7,7 +7,6 @@ import TableLine from "../molecules/TableLine";
 
 class ReportTable extends React.Component {
   render() {
-    console.log(`ReportTable: ${JSON.stringify(this.props.lines)}`)
     return (
       <Box className="table-container" style={{ marginBottom: 1.5 + "rem" }}>
         <Table className="is-narrow">
@@ -24,7 +23,6 @@ class ReportTable extends React.Component {
                 <TableLine
                   key={e.id}
                   {...e}
-                  runcount={this.props.runcount}
                   onMaterialChange={this.props.onMaterialChange}
                   onMaterialReportCountChange={
                     this.props.onMaterialReportCountChange

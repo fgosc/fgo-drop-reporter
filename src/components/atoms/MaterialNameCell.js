@@ -31,19 +31,7 @@ class MaterialNameCell extends React.Component {
     const value = this.props.material;
     const validationResult = this.isValidMaterialValue(value.trim());
 
-    if (validationResult === "BLANK") {
-      return (
-        <>
-          <Input
-            type="text"
-            className="input is-small is-danger"
-            value={value}
-            onChange={this.handleValueChange}
-          />
-          <Text className="help is-danger">入力必須</Text>
-        </>
-      );
-    } else if (validationResult === "TAILNUM") {
+    if (validationResult === "TAILNUM") {
       return (
         <>
           <Input
@@ -52,7 +40,7 @@ class MaterialNameCell extends React.Component {
             value={value}
             onChange={this.handleValueChange}
           />
-          <Text className="help is-danger">末尾は数字以外</Text>
+          <Text color="red">末尾は数字以外</Text>
         </>
       );
     }

@@ -2,7 +2,8 @@
 
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { FormLabel, Input } from "@chakra-ui/react";
+import { FormLabel, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 
 const defaultQuestName = "(クエスト名)";
 
@@ -20,46 +21,32 @@ class QuestNameEditor extends React.Component {
     if (questname === defaultQuestName || questname.trim().length === 0) {
       return (
         <Box className="control">
-          <Input
-            type="text"
-            isInvalid
-            value={questname}
-            onChange={this.handleChange}
-          />
+          <InputGroup>
+            <Input
+              isInvalid
+              value={questname}
+              onChange={this.handleChange}
+            />
+          </InputGroup>
           <Text color="red" as="b">
-            周回場所を入力してください。
-          </Text>
-        </Box>
-      );
-    }
-    const pos = questname.replace(/　/g, " ").trim().indexOf(" ");
-    if (pos < 0) {
-      return (
-        <Box className="control">
-          <Input
-            type="text"
-            className="input is-small is-info"
-            value={questname}
-            onChange={this.handleChange}
-          />
-          <Text className="help is-info">
-            「剣の修練場 超級」「オケアノス
-            豊かな海」のようにスペースで区切る記述を推奨します。
+              周回場所を入力してください。
           </Text>
         </Box>
       );
     }
     return (
       <Box className="control has-icons-right">
-        <Input
-          type="text"
-          className="input is-small is-success"
-          value={questname}
-          onChange={this.handleChange}
-        />
-        <Text size="small">
-          <i className="fas fa-check"></i>
-        </Text>
+        <InputGroup>
+          <Input
+            type="text"
+            className="input is-small is-success"
+            value={questname}
+            onChange={this.handleChange}
+          />
+          <InputRightElement>
+            <CheckIcon color="green.500" />
+          </InputRightElement>
+        </InputGroup>
       </Box>
     );
   }

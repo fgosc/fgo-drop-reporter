@@ -56,6 +56,7 @@ class EditBox extends React.Component {
     const questname = props.questname || "";
     const runcount = props.runcount || 0;
     const note = props.note || "";
+    console.log(`EditBox init`)
     const lines = this.initLines(props.lines);
     this.state = {
       questname: questname,
@@ -67,16 +68,7 @@ class EditBox extends React.Component {
     };
   }
 
-  shouldUpdateComponent(currentProps, prevProps) {
-    if (currentProps.questname !== prevProps.questname) {
-      return true;
-    }
-    if (currentProps.runcount !== prevProps.runcount) {
-      return true;
-    }
-    if (currentProps.note !== prevProps.note) {
-      return true;
-    }
+  shouldUpdateLine(currentProps, prevProps) {
     if (currentProps.lines.length !== prevProps.lines.length) {
       return true;
     }
@@ -97,25 +89,17 @@ class EditBox extends React.Component {
   }
 
   componentDidMount() {
-    // 初期の行数
-    let maxOrder = Math.max(...this.props.lines.map((line) => line.order), 0);
-    if (this.props.lines.length < this.minimumLines) {
-      const maxloop = this.minimumLines - this.props.lines.length;
-      const newlines = [];
-      for (let i = 0; i < maxloop; i++) {
-        newlines.push(this.initNewLine(maxOrder));
-        maxOrder++;
-      }
-      this.setState({ lines: newlines });
-    }
+    const newlines = this.initLines(this.props.lines)
+    this.setState({ lines: newlines });
   }
 
   // queryString の解析は DOM 操作であるため componentDidMount() よりもさらに遅れる。
   // componentDidUpdate() のタイミングで prevProps と this.props を比較して
   // state を再設定する。
   componentDidUpdate(prevProps, prevState) {
-    const shouldUpdate = this.shouldUpdateComponent(this.props, prevProps);
-    if (shouldUpdate) {
+    const shouldUpdateLine = this.shouldUpdateLine(this.props, prevProps);
+    console.log(`shouldUpdateLine: ${shouldUpdateLine}`)
+    if (shouldUpdateLine) {
       const newlines = this.initLines(this.props.lines);
       this.setState((state) => ({
         questname: this.props.questname,
@@ -439,20 +423,6 @@ ${note}
     return value;
   }
 
-  makeReportTable() {
-    return (
-      <ReportTable
-        {...this.state}
-        onMaterialChange={this.handleMaterialChange}
-        onMaterialReportCountChange={this.handleMaterialReportCountChange}
-        onLineDeleteButtonClick={this.handleLineDeleteButtonClick}
-        onLineUpButtonClick={this.handleLineUpButtonClick}
-        onLineDownButtonClick={this.handleLineDownButtonClick}
-        onAddLineButtonClick={this.handleAddLineButtonClick}
-      />
-    );
-  }
-
   render() {
     return (
       <Box mb={2}>
@@ -465,7 +435,17 @@ ${note}
           runcount={this.state.runcount}
           onRunCountChange={this.handleRunCountChange}
         />
-        <Box mt={1}>{this.makeReportTable()}</Box>
+        <Box mt={1}>
+          <ReportTable
+            lines={this.state.lines}
+            onMaterialChange={this.handleMaterialChange}
+            onMaterialReportCountChange={this.handleMaterialReportCountChange}
+            onLineDeleteButtonClick={this.handleLineDeleteButtonClick}
+            onLineUpButtonClick={this.handleLineUpButtonClick}
+            onLineDownButtonClick={this.handleLineDownButtonClick}
+            onAddLineButtonClick={this.handleAddLineButtonClick}
+          />
+        </Box>
         <NoteEditor note={this.state.note} onNoteChange={this.handleNoteChange} />
         <ReportViewer {...this.state} />
         <Stack spacing={2} direction="row" mt={2}>
