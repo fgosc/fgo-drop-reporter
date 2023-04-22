@@ -5,8 +5,12 @@ import ReportTable from "../organisms/ReportTable";
 import QuestNameEditor from "../molecules/QuestNameEditor";
 import ReportViewer from "../molecules/ReportViewer";
 import RunCountEditor from "../molecules/RunCountEditor";
+import NoteEditor from "../molecules/NoteEditor";
 import TweetButton from "../atoms/button/TweetButton";
 import { ReportButton } from "../atoms/button/ReportButton";
+
+// TODO 本番環境 URL が確定したら差し替え
+const siteURL = "http://localhost:3000"
 
 function getRandomString(length) {
   const characters =
@@ -29,6 +33,7 @@ class EditBox extends React.Component {
     this.handleMaterialChange = this.handleMaterialChange.bind(this);
     this.handleMaterialReportCountChange =
       this.handleMaterialReportCountChange.bind(this);
+    this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleLineDeleteButtonClick =
       this.handleLineDeleteButtonClick.bind(this);
     this.handleLineUpButtonClick = this.handleLineUpButtonClick.bind(this);
@@ -41,11 +46,13 @@ class EditBox extends React.Component {
 
     const questname = props.questname || "";
     const runcount = props.runs || 0;
+    const note = props.note || "";
     this.state = {
       questname: questname,
       runcount: runcount,
       lines: props.lines,
-      reportText: this.buildReportText(questname, runcount, props.lines),
+      reportText: this.buildReportText(questname, runcount, props.lines, note),
+      note: note,
       canTweet: false,
     };
   }
@@ -55,6 +62,9 @@ class EditBox extends React.Component {
       return true;
     }
     if (currentProps.runcount !== prevProps.runcount) {
+      return true;
+    }
+    if (currentProps.note !== prevProps.note) {
       return true;
     }
     if (currentProps.lines.length !== prevProps.lines.length) {
@@ -130,8 +140,10 @@ class EditBox extends React.Component {
         reportText: this.buildReportText(
           this.props.questname,
           this.props.runcount,
-          newlines
+          newlines,
+          this.props.note,
         ),
+        note: this.props.note,
       }));
     }
   }
@@ -149,7 +161,7 @@ class EditBox extends React.Component {
   handleQuestNameChange(questname) {
     this.setState((state) => ({
       questname: questname,
-      reportText: this.buildReportText(questname, state.runcount, state.lines),
+      reportText: this.buildReportText(questname, state.runcount, state.lines, state.note),
       canTweet: false,
     }));
   }
@@ -157,7 +169,7 @@ class EditBox extends React.Component {
   handleRunCountChange(runcount) {
     this.setState((state) => ({
       runcount: runcount,
-      reportText: this.buildReportText(state.questname, runcount, state.lines),
+      reportText: this.buildReportText(state.questname, runcount, state.lines, state.note),
       canTweet: false,
     }));
   }
@@ -183,7 +195,8 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        newlines
+        newlines,
+        state.note,
       ),
       canTweet: false,
     }));
@@ -211,7 +224,21 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        newlines
+        newlines,
+        state.note,
+      ),
+      canTweet: false,
+    }));
+  }
+
+  handleNoteChange(note) {
+    this.setState((state) => ({
+      note: note,
+      reportText: this.buildReportText(
+        state.questname,
+        state.runcount,
+        state.lines,
+        note,
       ),
       canTweet: false,
     }));
@@ -226,7 +253,8 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        newlines
+        newlines,
+        state.note,
       ),
       canTweet: false,
     }));
@@ -322,7 +350,8 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        linesCopy
+        linesCopy,
+        state.note,
       ),
       canTweet: false,
     }));
@@ -349,7 +378,8 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        linesCopy
+        linesCopy,
+        state.note,
       ),
       canTweet: false,
     }));
@@ -360,12 +390,16 @@ class EditBox extends React.Component {
     lines.push(this.initNewLine());
     this.setState((state) => ({
       lines: lines,
-      reportText: this.buildReportText(state.questname, state.runcount, lines),
+      reportText: this.buildReportText(
+        state.questname,
+        state.runcount,
+        lines,
+        state.note),
       canTweet: false,
     }));
   }
 
-  buildReportText(questname, runcount, lines) {
+  buildReportText(questname, runcount, lines, note) {
     const reportText = lines
       .filter((line) => {
         // 素材名未入力の行は除外
@@ -380,7 +414,8 @@ class EditBox extends React.Component {
 
     const value = `【${questname}】${runcount}周
 ${reportText}
-#FGO周回カウンタ https://aoshirobo.net/fatego/rc/
+#FGO周回カウンタ ${siteURL}
+${note}
 `;
     return value;
   }
@@ -416,6 +451,7 @@ ${reportText}
           onRunCountChange={this.handleRunCountChange}
         />
         <Box mt={1}>{this.makeReportTable()}</Box>
+        <NoteEditor note={this.state.note} onNoteChange={this.handleNoteChange} />
         <ReportViewer {...this.state} />
         <ReportButton {...this.state} />
         <TweetButton

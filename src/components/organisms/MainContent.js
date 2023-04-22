@@ -3,12 +3,12 @@ import TwitterAccount from "../molecules/TwitterAccount";
 import EditBox from "./EditBox";
 import SignOutButton from "../atoms/button/SignOutButton";
 
-const MainContent = ({ signOut, questname, runs, lines }) => {
+const MainContent = ({ signOut, questname, runs, lines, note }) => {
   return (
     <>
       <UserGreeting />
       <TwitterAccount />
-      <EditBox questname={questname} runs={runs} lines={lines} />
+      <EditBox questname={questname} runs={runs} lines={lines} note={note} />
       <SignOutButton onClick={signOut} />
     </>
   );

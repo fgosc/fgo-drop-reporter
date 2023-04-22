@@ -9,7 +9,7 @@ function AppContainer() {
   return (
     <UserAttributesProvider>
       <QuestData>
-        {({ questname, runs, lines }) => (
+        {({ questname, runs, lines, note }) => (
           <Authenticator>
             {({ signOut, user }) => (
               <LayoutGrid
@@ -17,6 +17,7 @@ function AppContainer() {
                 questname={questname}
                 runs={runs}
                 lines={lines}
+                note={note}
               />
             )}
           </Authenticator>

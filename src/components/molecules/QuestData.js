@@ -4,6 +4,7 @@ function QuestData({ children }) {
   const [questname, setQuestname] = useState("");
   const [runs, setRuns] = useState(0);
   const [lines, setLines] = useState([]);
+  const [note, setNote] = useState("");
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -15,6 +16,7 @@ function QuestData({ children }) {
           questname: "",
           runs: 0,
           lines: [],
+          note: "",
         };
       }
       const byteArray = new Uint8Array(
@@ -31,9 +33,10 @@ function QuestData({ children }) {
     setQuestname(initParams.questname);
     setRuns(initParams.runs);
     setLines(initParams.lines);
+    setNote(initParams.note);
   }, []);
 
-  return children({ questname, runs, lines });
+  return children({ questname, runs, lines, note });
 }
 
 export default QuestData;

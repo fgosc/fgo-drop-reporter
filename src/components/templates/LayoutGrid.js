@@ -3,7 +3,7 @@ import HeaderComponent from "../organisms/HeaderComponent";
 import MainContent from "../organisms/MainContent";
 import FooterComponent from "../organisms/FooterComponent";
 
-function LayoutGrid({ signOut, questname, runs, lines }) {
+function LayoutGrid({ signOut, questname, runs, lines, note }) {
   return (
     <Grid
       templateAreas={`"header header"
@@ -27,6 +27,7 @@ function LayoutGrid({ signOut, questname, runs, lines }) {
           questname={questname}
           runs={runs}
           lines={lines}
+          note={note}
         />
       </GridItem>
       <GridItem pl="2" area={"footer"}>
