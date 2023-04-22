@@ -8,14 +8,19 @@ function TweetButton(props) {
       props.reportText
     )}`;
     window.open(tweetURL, "_blank");
-  }
+  };
   // 報告が投稿されたらツイート可能
   const disabled = !props.reportPosted;
   return (
-    <Button size="sm" colorScheme="twitter" onClick={handleClick} isDisabled={disabled}>
+    <Button
+      size="sm"
+      colorScheme="twitter"
+      onClick={handleClick}
+      isDisabled={disabled}
+    >
       ツイートする
     </Button>
-  )
+  );
 }
 
 export default TweetButton;

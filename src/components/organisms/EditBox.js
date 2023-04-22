@@ -10,7 +10,7 @@ import TweetButton from "../atoms/button/TweetButton";
 import { ReportButton } from "../atoms/button/ReportButton";
 
 // TODO 本番環境 URL が確定したら差し替え
-const siteURL = "http://localhost:3000"
+const siteURL = "http://localhost:3000";
 
 function getRandomString(length) {
   const characters =
@@ -56,7 +56,6 @@ class EditBox extends React.Component {
     const questname = props.questname || "";
     const runcount = props.runcount || 0;
     const note = props.note || "";
-    console.log(`EditBox init`)
     const lines = this.initLines(props.lines);
     this.state = {
       questname: questname,
@@ -89,7 +88,7 @@ class EditBox extends React.Component {
   }
 
   componentDidMount() {
-    const newlines = this.initLines(this.props.lines)
+    const newlines = this.initLines(this.props.lines);
     this.setState({ lines: newlines });
   }
 
@@ -98,7 +97,6 @@ class EditBox extends React.Component {
   // state を再設定する。
   componentDidUpdate(prevProps, prevState) {
     const shouldUpdateLine = this.shouldUpdateLine(this.props, prevProps);
-    console.log(`shouldUpdateLine: ${shouldUpdateLine}`)
     if (shouldUpdateLine) {
       const newlines = this.initLines(this.props.lines);
       this.setState((state) => ({
@@ -109,7 +107,7 @@ class EditBox extends React.Component {
           this.props.questname,
           this.props.runcount,
           newlines,
-          this.props.note,
+          this.props.note
         ),
         note: this.props.note,
       }));
@@ -117,25 +115,31 @@ class EditBox extends React.Component {
   }
 
   initLines(lines) {
-    const newlines = lines.map(line => {
+    const newlines = lines.map((line) => {
       const newline = {};
-      newline.id = "id" in line ? defaultValue(line.id, getRandomString(16)) : getRandomString(16);
+      newline.id =
+        "id" in line
+          ? defaultValue(line.id, getRandomString(16))
+          : getRandomString(16);
       // map() 内で order を新規採番するのは難しいため、newlines を構築後に再度ループして設定する
-      newline.order = "order" in line ? defaultValue(line.order, 0): 0;
-      newline.material = "material" in line ? defaultValue(line.material, "") : "";
+      newline.order = "order" in line ? defaultValue(line.order, 0) : 0;
+      newline.material =
+        "material" in line ? defaultValue(line.material, "") : "";
       newline.initial = "initial" in line ? defaultValue(line.initial, 0) : 0;
       newline.report =
-        "report" in line ? defaultValue(line.report, 0) : this.computeReportValue(line);
+        "report" in line
+          ? defaultValue(line.report, 0)
+          : this.computeReportValue(line);
       return newline;
     });
     // order 採番
-    let maxOrder = Math.max(...newlines.map(line => line.order), 0);
-    newlines.forEach(newline => {
+    let maxOrder = Math.max(...newlines.map((line) => line.order), 0);
+    newlines.forEach((newline) => {
       if (newline.order === 0) {
         newline.order = maxOrder + 1;
-        maxOrder++
+        maxOrder++;
       }
-    })
+    });
     for (let i = 0; i < newlines.length; i++) {
       const newline = newlines[i];
       if (newline.order === 0) {
@@ -167,14 +171,24 @@ class EditBox extends React.Component {
   handleQuestNameChange(questname) {
     this.setState((state) => ({
       questname: questname,
-      reportText: this.buildReportText(questname, state.runcount, state.lines, state.note),
+      reportText: this.buildReportText(
+        questname,
+        state.runcount,
+        state.lines,
+        state.note
+      ),
     }));
   }
 
   handleRunCountChange(runcount) {
     this.setState((state) => ({
       runcount: runcount,
-      reportText: this.buildReportText(state.questname, runcount, state.lines, state.note),
+      reportText: this.buildReportText(
+        state.questname,
+        runcount,
+        state.lines,
+        state.note
+      ),
     }));
   }
 
@@ -200,7 +214,7 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         newlines,
-        state.note,
+        state.note
       ),
     }));
   }
@@ -228,7 +242,7 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         newlines,
-        state.note,
+        state.note
       ),
     }));
   }
@@ -240,7 +254,7 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         state.lines,
-        note,
+        note
       ),
     }));
   }
@@ -255,15 +269,15 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         newlines,
-        state.note,
+        state.note
       ),
     }));
   }
 
   handleReportPosted() {
-    this.setState(state => ({
+    this.setState((state) => ({
       reportPosted: true,
-    }))
+    }));
   }
 
   findAboveLine(lines, target) {
@@ -357,7 +371,7 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         linesCopy,
-        state.note,
+        state.note
       ),
     }));
   }
@@ -384,7 +398,7 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         linesCopy,
-        state.note,
+        state.note
       ),
     }));
   }
@@ -398,7 +412,8 @@ class EditBox extends React.Component {
         state.questname,
         state.runcount,
         lines,
-        state.note),
+        state.note
+      ),
     }));
   }
 
@@ -446,7 +461,10 @@ ${note}
             onAddLineButtonClick={this.handleAddLineButtonClick}
           />
         </Box>
-        <NoteEditor note={this.state.note} onNoteChange={this.handleNoteChange} />
+        <NoteEditor
+          note={this.state.note}
+          onNoteChange={this.handleNoteChange}
+        />
         <ReportViewer {...this.state} />
         <Stack spacing={2} direction="row" mt={2}>
           <ReportButton {...this.state} />
