@@ -5,7 +5,7 @@ function NoteEditor(props) {
         props.onNoteChange(event.target.value);
     }
     return (
-        <Box>
+        <Box mt={2}>
             <Text>コメント</Text>
             <Textarea value={props.note} onChange={handleChange} />
         </Box>

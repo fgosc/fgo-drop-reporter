@@ -1,6 +1,6 @@
 // EditBox.js
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 import ReportTable from "../organisms/ReportTable";
 import QuestNameEditor from "../molecules/QuestNameEditor";
 import ReportViewer from "../molecules/ReportViewer";
@@ -24,6 +24,15 @@ function getRandomString(length) {
   return result;
 }
 
+function defaultValue(value, defaultVal) {
+  // === だと null と undefined を区別してしまう。
+  // ここではその両方を拾いたいのであえて == を使う。
+  if (value == null) {
+    return defaultVal;
+  }
+  return value;
+}
+
 class EditBox extends React.Component {
   constructor(props) {
     super(props);
@@ -36,24 +45,25 @@ class EditBox extends React.Component {
     this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleLineDeleteButtonClick =
       this.handleLineDeleteButtonClick.bind(this);
+    this.handleReportPosted = this.handleReportPosted.bind(this);
     this.handleLineUpButtonClick = this.handleLineUpButtonClick.bind(this);
     this.handleLineDownButtonClick = this.handleLineDownButtonClick.bind(this);
     this.handleAddLineButtonClick = this.handleAddLineButtonClick.bind(this);
     this.buildReportText = this.buildReportText.bind(this);
-    this.handleShowTweetButton = this.handleShowTweetButton.bind(this);
 
     this.minimumLines = 5;
 
     const questname = props.questname || "";
     const runcount = props.runcount || 0;
     const note = props.note || "";
+    const lines = this.initLines(props.lines);
     this.state = {
       questname: questname,
       runcount: runcount,
-      lines: props.lines,
+      lines: lines,
       reportText: this.buildReportText(questname, runcount, props.lines, note),
       note: note,
-      canTweet: false,
+      reportPosted: false,
     };
   }
 
@@ -88,7 +98,7 @@ class EditBox extends React.Component {
 
   componentDidMount() {
     // 初期の行数
-    let maxOrder = Math.max(this.props.lines.map((line) => line.order));
+    let maxOrder = Math.max(...this.props.lines.map((line) => line.order), 0);
     if (this.props.lines.length < this.minimumLines) {
       const maxloop = this.minimumLines - this.props.lines.length;
       const newlines = [];
@@ -106,32 +116,7 @@ class EditBox extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const shouldUpdate = this.shouldUpdateComponent(this.props, prevProps);
     if (shouldUpdate) {
-      const newlines = this.props.lines.map((line) => {
-        const newline = {};
-        newline.id = "id" in line ? line.id : getRandomString(16);
-        // map() 内で order を新規採番するのは難しいため、newlines を構築後に再度ループして設定する
-        newline.order = line.order || 0;
-        newline.material = "material" in line ? line.material : "";
-        newline.initial = "initial" in line ? line.initial : 0;
-        newline.report =
-          "report" in line ? line.report : this.computeReportValue(line);
-        return newline;
-      });
-      let maxOrder = Math.max(newlines.map((line) => line.order));
-      for (let i = 0; i < newlines.length; i++) {
-        const newline = newlines[i];
-        if (newline.order === 0) {
-          newline.order = maxOrder + 1;
-          maxOrder++;
-        }
-      }
-      if (newlines.length < this.minimumLines) {
-        const maxloop = this.minimumLines - newlines.length;
-        for (let i = 0; i < maxloop; i++) {
-          newlines.push(this.initNewLine(maxOrder));
-          maxOrder++;
-        }
-      }
+      const newlines = this.initLines(this.props.lines);
       this.setState((state) => ({
         questname: this.props.questname,
         runcount: this.props.runcount,
@@ -145,6 +130,44 @@ class EditBox extends React.Component {
         note: this.props.note,
       }));
     }
+  }
+
+  initLines(lines) {
+    const newlines = lines.map(line => {
+      const newline = {};
+      newline.id = "id" in line ? defaultValue(line.id, getRandomString(16)) : getRandomString(16);
+      // map() 内で order を新規採番するのは難しいため、newlines を構築後に再度ループして設定する
+      newline.order = "order" in line ? defaultValue(line.order, 0): 0;
+      newline.material = "material" in line ? defaultValue(line.material, "") : "";
+      newline.initial = "initial" in line ? defaultValue(line.initial, 0) : 0;
+      newline.report =
+        "report" in line ? defaultValue(line.report, 0) : this.computeReportValue(line);
+      return newline;
+    });
+    // order 採番
+    let maxOrder = Math.max(...newlines.map(line => line.order), 0);
+    newlines.forEach(newline => {
+      if (newline.order === 0) {
+        newline.order = maxOrder + 1;
+        maxOrder++
+      }
+    })
+    for (let i = 0; i < newlines.length; i++) {
+      const newline = newlines[i];
+      if (newline.order === 0) {
+        newline.order = maxOrder + 1;
+        maxOrder++;
+      }
+    }
+    // 最低行数を満たさない場合は行追加
+    if (newlines.length < this.minimumLines) {
+      const maxloop = this.minimumLines - newlines.length;
+      for (let i = 0; i < maxloop; i++) {
+        newlines.push(this.initNewLine(maxOrder));
+        maxOrder++;
+      }
+    }
+    return newlines;
   }
 
   initNewLine(maxOrder) {
@@ -161,7 +184,6 @@ class EditBox extends React.Component {
     this.setState((state) => ({
       questname: questname,
       reportText: this.buildReportText(questname, state.runcount, state.lines, state.note),
-      canTweet: false,
     }));
   }
 
@@ -169,7 +191,6 @@ class EditBox extends React.Component {
     this.setState((state) => ({
       runcount: runcount,
       reportText: this.buildReportText(state.questname, runcount, state.lines, state.note),
-      canTweet: false,
     }));
   }
 
@@ -197,7 +218,6 @@ class EditBox extends React.Component {
         newlines,
         state.note,
       ),
-      canTweet: false,
     }));
   }
 
@@ -226,7 +246,6 @@ class EditBox extends React.Component {
         newlines,
         state.note,
       ),
-      canTweet: false,
     }));
   }
 
@@ -239,7 +258,6 @@ class EditBox extends React.Component {
         state.lines,
         note,
       ),
-      canTweet: false,
     }));
   }
 
@@ -255,8 +273,13 @@ class EditBox extends React.Component {
         newlines,
         state.note,
       ),
-      canTweet: false,
     }));
+  }
+
+  handleReportPosted() {
+    this.setState(state => ({
+      reportPosted: true,
+    }))
   }
 
   findAboveLine(lines, target) {
@@ -352,7 +375,6 @@ class EditBox extends React.Component {
         linesCopy,
         state.note,
       ),
-      canTweet: false,
     }));
   }
 
@@ -380,7 +402,6 @@ class EditBox extends React.Component {
         linesCopy,
         state.note,
       ),
-      canTweet: false,
     }));
   }
 
@@ -394,7 +415,6 @@ class EditBox extends React.Component {
         state.runcount,
         lines,
         state.note),
-      canTweet: false,
     }));
   }
 
@@ -419,10 +439,6 @@ ${note}
     return value;
   }
 
-  handleShowTweetButton(event) {
-    this.setState({ canTweet: true });
-  }
-
   makeReportTable() {
     return (
       <ReportTable
@@ -439,7 +455,7 @@ ${note}
 
   render() {
     return (
-      <Box>
+      <Box mb={2}>
         <QuestNameEditor
           questname={this.state.questname}
           onQuestNameChange={this.handleQuestNameChange}
@@ -452,11 +468,10 @@ ${note}
         <Box mt={1}>{this.makeReportTable()}</Box>
         <NoteEditor note={this.state.note} onNoteChange={this.handleNoteChange} />
         <ReportViewer {...this.state} />
-        <ReportButton {...this.state} />
-        <TweetButton
-          {...this.state}
-          onShowTweetButton={this.handleShowTweetButton}
-        />
+        <Stack spacing={2} direction="row" mt={2}>
+          <ReportButton {...this.state} />
+          <TweetButton {...this.state} />
+        </Stack>
       </Box>
     );
   }

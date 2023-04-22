@@ -1,28 +1,21 @@
 // TweetButton.js
 import React from "react";
-import { Box, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
-class TweetButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
+function TweetButton(props) {
+  const handleClick = () => {
     const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      this.props.reportText
+      props.reportText
     )}`;
     window.open(tweetURL, "_blank");
   }
-
-  render() {
-    const tweetButton = (
-      <Button size="sm" colorScheme="twitter" onClick={this.handleClick}>
-        ツイートする
-      </Button>
-    );
-    return <Box mt={1}>{tweetButton}</Box>;
-  }
+  // 報告が投稿されたらツイート可能
+  const disabled = !props.reportPosted;
+  return (
+    <Button size="sm" colorScheme="twitter" onClick={handleClick} isDisabled={disabled}>
+      ツイートする
+    </Button>
+  )
 }
 
 export default TweetButton;

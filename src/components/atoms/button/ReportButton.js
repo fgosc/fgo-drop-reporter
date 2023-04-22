@@ -144,11 +144,9 @@ export const ReportButton = memo((props) => {
     AddReport(reportData);
   };
 
-  const reportButton = (
+  return (
     <Button size="sm" colorScheme="twitter" onClick={handleClick}>
       投稿する
     </Button>
   );
-
-  return <Box mt={1}>{reportButton}</Box>;
 });
