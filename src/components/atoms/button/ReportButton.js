@@ -1,10 +1,11 @@
-import { memo } from "react";
+import { memo, useContext } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Box, Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
+import UserAttributesContext from "../../../contexts/UserAttributesContext";
 
-function createReportJSON(questname, runcount, lines) {
+function createReportJSON(questname, runcount, lines, userAttributes) {
   const normalWarNames = [
     "冬木",
     "オルレアン",
@@ -87,7 +88,9 @@ function createReportJSON(questname, runcount, lines) {
     }
   );
 
+  console.log(userAttributes);
   return {
+    user: userAttributes.name,
     type,
     warName,
     questName,
@@ -101,6 +104,8 @@ function createReportJSON(questname, runcount, lines) {
 
 export const ReportButton = memo((props) => {
   const { questname, runcount, lines } = props;
+  const userAttributes = useContext(UserAttributesContext);
+  //   console.log(userAttributes);
 
   const toast = useToast();
 
@@ -130,9 +135,14 @@ export const ReportButton = memo((props) => {
   }
 
   const handleClick = () => {
-    const reportData = createReportJSON(questname, runcount, lines);
+    const reportData = createReportJSON(
+      questname,
+      runcount,
+      lines,
+      userAttributes
+    );
     console.log(reportData);
-    AddReport(reportData);
+    // AddReport(reportData);
   };
 
   const reportButton = (
