@@ -1,7 +1,7 @@
 import { memo, useContext } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
-import { Box, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import UserAttributesContext from "../../../contexts/UserAttributesContext";
 
@@ -31,7 +31,6 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
     "ナウイ・ミクトラン",
   ];
 
-  const spaceIndex = questname.indexOf(" ");
   let warName = null;
   let questName = questname;
 
@@ -51,7 +50,7 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
 
   const dropObjectsMap = new Map();
 
-  for (const { material, report } of lines) {
+  for (let { material, report } of lines) {
     // materialが空文字列の場合は無視する
     if (material === "") {
       continue;
@@ -144,11 +143,9 @@ export const ReportButton = memo((props) => {
     AddReport(reportData);
   };
 
-  const reportButton = (
+  return (
     <Button size="sm" colorScheme="twitter" onClick={handleClick}>
       投稿する
     </Button>
   );
-
-  return <Box mt={1}>{reportButton}</Box>;
 });

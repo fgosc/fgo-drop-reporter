@@ -21,7 +21,8 @@ EditBox に渡すパラメーターを外部から指定できる。
             "material": "素材名2",
             "initial": 0,
         }
-    ]
+    ],
+    "note": "備考", // 備考: string, required
 }
 ```
 

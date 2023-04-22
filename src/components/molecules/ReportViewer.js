@@ -24,7 +24,7 @@ class ReportViewer extends React.Component {
     const numRows = this.computeRows(rows);
 
     return (
-      <Box>
+      <Box mt={2}>
         <HStack spacing={2} mb={1}>
           <Text>周回報告テキスト</Text>
           <Tag>直接編集不可</Tag>

@@ -3,11 +3,16 @@ import React from "react";
 import { Box, Button, Text } from "@chakra-ui/react";
 import {
   FormLabel,
-  Input,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
+import "./RunCountEditor.css"
 
 class RunCountEditor extends React.Component {
   constructor(props) {
@@ -17,8 +22,8 @@ class RunCountEditor extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleChange(event) {
-    this.props.onRunCountChange(event.target.value);
+  handleChange(value) {
+    this.props.onRunCountChange(value);
   }
 
   addValue(delta) {
@@ -40,13 +45,18 @@ class RunCountEditor extends React.Component {
     if (_runcount <= 0 || isNaN(_runcount)) {
       return (
         <Box>
-          <Input
-            type="number"
+          <NumberInput
             isInvalid
-            min="0"
+            min={0}
             value={this.props.runcount}
             onChange={this.handleChange}
-          />
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
           <Text color="red" as="b">
             周回数を設定してください。
           </Text>
@@ -54,18 +64,23 @@ class RunCountEditor extends React.Component {
       );
     }
     return (
-      <Box className="control has-icons-right">
-        <InputGroup>
-          <Input
-            type="number"
-            min="0"
-            value={this.props.runcount}
-            onChange={this.handleChange}
-          />
-          <InputRightElement>
-            <CheckIcon color="green.500" />
-          </InputRightElement>
-        </InputGroup>
+      <Box>
+        <NumberInput
+          min={0}
+          value={this.props.runcount}
+          onChange={this.handleChange}
+        >
+          <InputGroup>
+            <NumberInputField />
+            <InputRightElement className="NumberCheckIcon">
+              <CheckIcon color="green.500" />
+            </InputRightElement>
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </InputGroup>
+        </NumberInput>
       </Box>
     );
   }

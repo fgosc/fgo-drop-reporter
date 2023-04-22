@@ -1,12 +1,16 @@
 // EditBox.js
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 import ReportTable from "../organisms/ReportTable";
 import QuestNameEditor from "../molecules/QuestNameEditor";
 import ReportViewer from "../molecules/ReportViewer";
 import RunCountEditor from "../molecules/RunCountEditor";
+import NoteEditor from "../molecules/NoteEditor";
 import TweetButton from "../atoms/button/TweetButton";
 import { ReportButton } from "../atoms/button/ReportButton";
+
+// TODO 本番環境 URL が確定したら差し替え
+const siteURL = "http://localhost:3000";
 
 function getRandomString(length) {
   const characters =
@@ -20,6 +24,15 @@ function getRandomString(length) {
   return result;
 }
 
+function defaultValue(value, defaultVal) {
+  // === だと null と undefined を区別してしまう。
+  // ここではその両方を拾いたいのであえて == を使う。
+  if (value == null) {
+    return defaultVal;
+  }
+  return value;
+}
+
 class EditBox extends React.Component {
   constructor(props) {
     super(props);
@@ -29,34 +42,32 @@ class EditBox extends React.Component {
     this.handleMaterialChange = this.handleMaterialChange.bind(this);
     this.handleMaterialReportCountChange =
       this.handleMaterialReportCountChange.bind(this);
+    this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleLineDeleteButtonClick =
       this.handleLineDeleteButtonClick.bind(this);
+    this.handleReportPosted = this.handleReportPosted.bind(this);
     this.handleLineUpButtonClick = this.handleLineUpButtonClick.bind(this);
     this.handleLineDownButtonClick = this.handleLineDownButtonClick.bind(this);
     this.handleAddLineButtonClick = this.handleAddLineButtonClick.bind(this);
     this.buildReportText = this.buildReportText.bind(this);
-    this.handleShowTweetButton = this.handleShowTweetButton.bind(this);
 
     this.minimumLines = 5;
 
     const questname = props.questname || "";
-    const runcount = props.runs || 0;
+    const runcount = props.runcount || 0;
+    const note = props.note || "";
+    const lines = this.initLines(props.lines);
     this.state = {
       questname: questname,
       runcount: runcount,
-      lines: props.lines,
-      reportText: this.buildReportText(questname, runcount, props.lines),
-      canTweet: false,
+      lines: lines,
+      reportText: this.buildReportText(questname, runcount, props.lines, note),
+      note: note,
+      reportPosted: false,
     };
   }
 
-  shouldUpdateComponent(currentProps, prevProps) {
-    if (currentProps.questname !== prevProps.questname) {
-      return true;
-    }
-    if (currentProps.runcount !== prevProps.runcount) {
-      return true;
-    }
+  shouldUpdateLine(currentProps, prevProps) {
     if (currentProps.lines.length !== prevProps.lines.length) {
       return true;
     }
@@ -77,52 +88,17 @@ class EditBox extends React.Component {
   }
 
   componentDidMount() {
-    // 初期の行数
-    let maxOrder = Math.max(this.props.lines.map((line) => line.order));
-    if (this.props.lines.length < this.minimumLines) {
-      const maxloop = this.minimumLines - this.props.lines.length;
-      const newlines = [];
-      for (let i = 0; i < maxloop; i++) {
-        newlines.push(this.initNewLine(maxOrder));
-        maxOrder++;
-      }
-      this.setState({ lines: newlines });
-    }
+    const newlines = this.initLines(this.props.lines);
+    this.setState({ lines: newlines });
   }
 
   // queryString の解析は DOM 操作であるため componentDidMount() よりもさらに遅れる。
   // componentDidUpdate() のタイミングで prevProps と this.props を比較して
   // state を再設定する。
   componentDidUpdate(prevProps, prevState) {
-    const shouldUpdate = this.shouldUpdateComponent(this.props, prevProps);
-    if (shouldUpdate) {
-      const newlines = this.props.lines.map((line) => {
-        const newline = {};
-        newline.id = "id" in line ? line.id : getRandomString(16);
-        // map() 内で order を新規採番するのは難しいため、newlines を構築後に再度ループして設定する
-        newline.order = line.order || 0;
-        newline.material = "material" in line ? line.material : "";
-        newline.initial = "initial" in line ? line.initial : 0;
-        newline.report =
-          "report" in line ? line.report : this.computeReportValue(line);
-        return newline;
-      });
-      let maxOrder = Math.max(newlines.map((line) => line.order));
-      for (let i = 0; i < newlines.length; i++) {
-        const newline = newlines[i];
-        if (newline.order === 0) {
-          newline.order = maxOrder + 1;
-          maxOrder++;
-        }
-      }
-      if (newlines.length < this.minimumLines) {
-        const maxloop = this.minimumLines - newlines.length;
-        for (let i = 0; i < maxloop; i++) {
-          newlines.push(this.initNewLine(maxOrder));
-          maxOrder++;
-        }
-      }
-      console.log("newlines", newlines);
+    const shouldUpdateLine = this.shouldUpdateLine(this.props, prevProps);
+    if (shouldUpdateLine) {
+      const newlines = this.initLines(this.props.lines);
       this.setState((state) => ({
         questname: this.props.questname,
         runcount: this.props.runcount,
@@ -130,10 +106,56 @@ class EditBox extends React.Component {
         reportText: this.buildReportText(
           this.props.questname,
           this.props.runcount,
-          newlines
+          newlines,
+          this.props.note
         ),
+        note: this.props.note,
       }));
     }
+  }
+
+  initLines(lines) {
+    const newlines = lines.map((line) => {
+      const newline = {};
+      newline.id =
+        "id" in line
+          ? defaultValue(line.id, getRandomString(16))
+          : getRandomString(16);
+      // map() 内で order を新規採番するのは難しいため、newlines を構築後に再度ループして設定する
+      newline.order = "order" in line ? defaultValue(line.order, 0) : 0;
+      newline.material =
+        "material" in line ? defaultValue(line.material, "") : "";
+      newline.initial = "initial" in line ? defaultValue(line.initial, 0) : 0;
+      newline.report =
+        "report" in line
+          ? defaultValue(line.report, 0)
+          : this.computeReportValue(line);
+      return newline;
+    });
+    // order 採番
+    let maxOrder = Math.max(...newlines.map((line) => line.order), 0);
+    newlines.forEach((newline) => {
+      if (newline.order === 0) {
+        newline.order = maxOrder + 1;
+        maxOrder++;
+      }
+    });
+    for (let i = 0; i < newlines.length; i++) {
+      const newline = newlines[i];
+      if (newline.order === 0) {
+        newline.order = maxOrder + 1;
+        maxOrder++;
+      }
+    }
+    // 最低行数を満たさない場合は行追加
+    if (newlines.length < this.minimumLines) {
+      const maxloop = this.minimumLines - newlines.length;
+      for (let i = 0; i < maxloop; i++) {
+        newlines.push(this.initNewLine(maxOrder));
+        maxOrder++;
+      }
+    }
+    return newlines;
   }
 
   initNewLine(maxOrder) {
@@ -149,16 +171,24 @@ class EditBox extends React.Component {
   handleQuestNameChange(questname) {
     this.setState((state) => ({
       questname: questname,
-      reportText: this.buildReportText(questname, state.runcount, state.lines),
-      canTweet: false,
+      reportText: this.buildReportText(
+        questname,
+        state.runcount,
+        state.lines,
+        state.note
+      ),
     }));
   }
 
   handleRunCountChange(runcount) {
     this.setState((state) => ({
       runcount: runcount,
-      reportText: this.buildReportText(state.questname, runcount, state.lines),
-      canTweet: false,
+      reportText: this.buildReportText(
+        state.questname,
+        runcount,
+        state.lines,
+        state.note
+      ),
     }));
   }
 
@@ -183,9 +213,9 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        newlines
+        newlines,
+        state.note
       ),
-      canTweet: false,
     }));
   }
 
@@ -211,9 +241,21 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        newlines
+        newlines,
+        state.note
       ),
-      canTweet: false,
+    }));
+  }
+
+  handleNoteChange(note) {
+    this.setState((state) => ({
+      note: note,
+      reportText: this.buildReportText(
+        state.questname,
+        state.runcount,
+        state.lines,
+        note
+      ),
     }));
   }
 
@@ -226,9 +268,15 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        newlines
+        newlines,
+        state.note
       ),
-      canTweet: false,
+    }));
+  }
+
+  handleReportPosted() {
+    this.setState((state) => ({
+      reportPosted: true,
     }));
   }
 
@@ -322,9 +370,9 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        linesCopy
+        linesCopy,
+        state.note
       ),
-      canTweet: false,
     }));
   }
 
@@ -349,9 +397,9 @@ class EditBox extends React.Component {
       reportText: this.buildReportText(
         state.questname,
         state.runcount,
-        linesCopy
+        linesCopy,
+        state.note
       ),
-      canTweet: false,
     }));
   }
 
@@ -360,12 +408,16 @@ class EditBox extends React.Component {
     lines.push(this.initNewLine());
     this.setState((state) => ({
       lines: lines,
-      reportText: this.buildReportText(state.questname, state.runcount, lines),
-      canTweet: false,
+      reportText: this.buildReportText(
+        state.questname,
+        state.runcount,
+        lines,
+        state.note
+      ),
     }));
   }
 
-  buildReportText(questname, runcount, lines) {
+  buildReportText(questname, runcount, lines, note) {
     const reportText = lines
       .filter((line) => {
         // 素材名未入力の行は除外
@@ -380,32 +432,15 @@ class EditBox extends React.Component {
 
     const value = `【${questname}】${runcount}周
 ${reportText}
-#FGO周回カウンタ https://aoshirobo.net/fatego/rc/
+#FGO周回カウンタ ${siteURL}
+${note}
 `;
     return value;
   }
 
-  handleShowTweetButton(event) {
-    this.setState({ canTweet: true });
-  }
-
-  makeReportTable() {
-    return (
-      <ReportTable
-        {...this.state}
-        onMaterialChange={this.handleMaterialChange}
-        onMaterialReportCountChange={this.handleMaterialReportCountChange}
-        onLineDeleteButtonClick={this.handleLineDeleteButtonClick}
-        onLineUpButtonClick={this.handleLineUpButtonClick}
-        onLineDownButtonClick={this.handleLineDownButtonClick}
-        onAddLineButtonClick={this.handleAddLineButtonClick}
-      />
-    );
-  }
-
   render() {
     return (
-      <Box>
+      <Box mb={2}>
         <QuestNameEditor
           questname={this.state.questname}
           onQuestNameChange={this.handleQuestNameChange}
@@ -415,13 +450,26 @@ ${reportText}
           runcount={this.state.runcount}
           onRunCountChange={this.handleRunCountChange}
         />
-        <Box mt={1}>{this.makeReportTable()}</Box>
-        <ReportViewer {...this.state} />
-        <ReportButton {...this.state} />
-        <TweetButton
-          {...this.state}
-          onShowTweetButton={this.handleShowTweetButton}
+        <Box mt={1}>
+          <ReportTable
+            lines={this.state.lines}
+            onMaterialChange={this.handleMaterialChange}
+            onMaterialReportCountChange={this.handleMaterialReportCountChange}
+            onLineDeleteButtonClick={this.handleLineDeleteButtonClick}
+            onLineUpButtonClick={this.handleLineUpButtonClick}
+            onLineDownButtonClick={this.handleLineDownButtonClick}
+            onAddLineButtonClick={this.handleAddLineButtonClick}
+          />
+        </Box>
+        <NoteEditor
+          note={this.state.note}
+          onNoteChange={this.handleNoteChange}
         />
+        <ReportViewer {...this.state} />
+        <Stack spacing={2} direction="row" mt={2}>
+          <ReportButton {...this.state} />
+          <TweetButton {...this.state} />
+        </Stack>
       </Box>
     );
   }

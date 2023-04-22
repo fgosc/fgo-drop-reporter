@@ -23,7 +23,6 @@ class ReportTable extends React.Component {
                 <TableLine
                   key={e.id}
                   {...e}
-                  runcount={this.props.runcount}
                   onMaterialChange={this.props.onMaterialChange}
                   onMaterialReportCountChange={
                     this.props.onMaterialReportCountChange
