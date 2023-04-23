@@ -81,8 +81,6 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
       return {
         objectName,
         drops,
-        bonus: null,
-        dropUpRate: null,
       };
     }
   );
@@ -95,8 +93,7 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
     questName,
     timestamp,
     runs,
-    url: null,
-    memo: null,
+    note: null,
     dropObjects,
   };
 }

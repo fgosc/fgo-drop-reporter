@@ -15,16 +15,13 @@ export const getReport = /* GraphQL */ `
       questName
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -50,12 +47,9 @@ export const listReports = /* GraphQL */ `
         questName
         timestamp
         runs
-        url
-        memo
+        note
         dropObjects {
           objectName
-          bonus
-          dropUpRate
         }
         createdAt
         updatedAt
@@ -64,8 +58,8 @@ export const listReports = /* GraphQL */ `
     }
   }
 `;
-export const reportsByOwnerAndTimestamp = /* GraphQL */ `
-  query ReportsByOwnerAndTimestamp(
+export const listPostsBySpecificOwner = /* GraphQL */ `
+  query ListPostsBySpecificOwner(
     $owner: String!
     $timestamp: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
@@ -73,7 +67,7 @@ export const reportsByOwnerAndTimestamp = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    reportsByOwnerAndTimestamp(
+    listPostsBySpecificOwner(
       owner: $owner
       timestamp: $timestamp
       sortDirection: $sortDirection
@@ -93,12 +87,9 @@ export const reportsByOwnerAndTimestamp = /* GraphQL */ `
         questName
         timestamp
         runs
-        url
-        memo
+        note
         dropObjects {
           objectName
-          bonus
-          dropUpRate
         }
         createdAt
         updatedAt
@@ -107,8 +98,8 @@ export const reportsByOwnerAndTimestamp = /* GraphQL */ `
     }
   }
 `;
-export const reportsByTypeAndTimestamp = /* GraphQL */ `
-  query ReportsByTypeAndTimestamp(
+export const listPostsSortedByTimestamp = /* GraphQL */ `
+  query ListPostsSortedByTimestamp(
     $type: String!
     $timestamp: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
@@ -116,7 +107,7 @@ export const reportsByTypeAndTimestamp = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    reportsByTypeAndTimestamp(
+    listPostsSortedByTimestamp(
       type: $type
       timestamp: $timestamp
       sortDirection: $sortDirection
@@ -136,12 +127,9 @@ export const reportsByTypeAndTimestamp = /* GraphQL */ `
         questName
         timestamp
         runs
-        url
-        memo
+        note
         dropObjects {
           objectName
-          bonus
-          dropUpRate
         }
         createdAt
         updatedAt

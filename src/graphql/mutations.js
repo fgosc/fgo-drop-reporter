@@ -18,16 +18,13 @@ export const updateReport = /* GraphQL */ `
       questName
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -51,16 +48,13 @@ export const deleteReport = /* GraphQL */ `
       questName
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -84,16 +78,13 @@ export const createReport = /* GraphQL */ `
       questName
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt

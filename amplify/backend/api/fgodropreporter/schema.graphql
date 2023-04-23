@@ -1,6 +1,6 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-#input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+# input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
 type DropStackNum {
   num: Int!
@@ -10,8 +10,6 @@ type DropStackNum {
 type DropObject {
   objectName: String!
   drops: [DropStackNum!]!
-  bonus: Int
-  dropUpRate: Int
 }
 
 type Report
@@ -20,24 +18,31 @@ type Report
     rules: [
       { allow: public, operations: [create, read] }
       { allow: groups, groups: ["Admin"] }
-      { allow: owner }
+      { allow: owner, ownerField: "owner" }
     ]
   ) {
   id: ID!
   owner: String
     @auth(rules: [{ allow: owner, operations: [read, delete] }])
-    @index(name: "listbyOwnerTimestamp", sortKeyFields: ["timestamp"])
+    @index(
+      name: "BySpecificOwner"
+      sortKeyFields: ["timestamp"]
+      queryField: "listPostsBySpecificOwner"
+    )
   name: String
   twitter_id: String
   twitter_name: String
   twitter_username: String
   type: String!
-    @index(name: "listbyReportTimestamp", sortKeyFields: ["timestamp"])
+    @index(
+      name: "SortByTimestamp"
+      sortKeyFields: ["timestamp"]
+      queryField: "listPostsSortedByTimestamp"
+    )
   warName: String
   questName: String!
   timestamp: Int!
   runs: Int!
-  url: AWSURL
-  memo: String
+  note: String
   dropObjects: [DropObject!]!
 }
