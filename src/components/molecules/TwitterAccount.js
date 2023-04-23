@@ -29,7 +29,6 @@ function TwitterAccount(props) {
         )}`;
         console.log(oauth_url);
         window.location.href = oauth_url;
-        setLoading(false);
       }
     } catch (error) {
       console.error(error);
