@@ -1,11 +1,11 @@
-import { memo, useContext } from "react";
+import { memo, useContext, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import UserAttributesContext from "../../../contexts/UserAttributesContext";
 
-function createReportJSON(questname, runcount, lines, userAttributes) {
+function createReportJSON(questname, runcount, lines, note, userAttributes) {
   const normalWarNames = [
     "冬木",
     "オルレアン",
@@ -33,6 +33,33 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
 
   let warName = null;
   let questName = questname;
+  let twitter_id = null; // custom:twitter_idに対応
+  let twitter_name = null; // custom:twitter_nameに対応
+  let twitter_username = null; // custom:twitter_usernameに対応
+
+  if (
+    userAttributes["custom:twitter_id"] !== undefined &&
+    userAttributes["custom:twitter_id"] !== null &&
+    userAttributes["custom:twitter_id"] !== ""
+  ) {
+    twitter_id = userAttributes["custom:twitter_id"];
+  }
+
+  if (
+    userAttributes["custom:twitter_name"] !== undefined &&
+    userAttributes["custom:twitter_name"] !== null &&
+    userAttributes["custom:twitter_name"] !== ""
+  ) {
+    twitter_name = userAttributes["custom:twitter_name"];
+  }
+
+  if (
+    userAttributes["custom:twitter_username"] !== undefined &&
+    userAttributes["custom:twitter_username"] !== null &&
+    userAttributes["custom:twitter_username"] !== ""
+  ) {
+    twitter_username = userAttributes["custom:twitter_username"];
+  }
 
   // questname が normalWarNames + " " で始まる場合、" " で分割して warName と questName を設定
   for (const normalWarName of normalWarNames) {
@@ -85,7 +112,6 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
     }
   );
 
-  console.log(userAttributes);
   return {
     name: userAttributes.name,
     type,
@@ -93,18 +119,23 @@ function createReportJSON(questname, runcount, lines, userAttributes) {
     questName,
     timestamp,
     runs,
-    note: null,
+    note,
     dropObjects,
+    twitter_id,
+    twitter_name,
+    twitter_username,
   };
 }
 
 export const ReportButton = memo((props) => {
-  const { questname, runcount, lines } = props;
+  const [loading, setLoading] = useState(false);
+  const { questname, runcount, lines, note } = props;
   const userAttributes = useContext(UserAttributesContext);
 
   const toast = useToast();
 
   async function AddReport(report) {
+    setLoading(true);
     try {
       const result = await API.graphql(
         graphqlOperation(createReport, { input: report })
@@ -127,6 +158,7 @@ export const ReportButton = memo((props) => {
         isClosable: true,
       });
     }
+    setLoading(false);
   }
 
   const handleClick = () => {
@@ -134,6 +166,7 @@ export const ReportButton = memo((props) => {
       questname,
       runcount,
       lines,
+      note,
       userAttributes
     );
     console.log(reportData);
@@ -141,7 +174,12 @@ export const ReportButton = memo((props) => {
   };
 
   return (
-    <Button size="sm" colorScheme="twitter" onClick={handleClick}>
+    <Button
+      size="sm"
+      colorScheme="twitter"
+      isLoading={loading}
+      onClick={handleClick}
+    >
       投稿する
     </Button>
   );

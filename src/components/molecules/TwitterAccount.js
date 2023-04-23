@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { API, Auth } from "aws-amplify";
 
 function TwitterAccount(props) {
+  const [loading, setLoading] = useState(false);
   async function handleClick() {
+    setLoading(true);
     try {
       const session = await Auth.currentSession();
       const idToken = session.getIdToken().getJwtToken();
@@ -26,15 +29,17 @@ function TwitterAccount(props) {
         )}`;
         console.log(oauth_url);
         window.location.href = oauth_url;
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   }
 
   return (
     <Box>
-      <Button colorScheme="twitter" onClick={handleClick}>
+      <Button colorScheme="twitter" onClick={handleClick} isLoading={loading}>
         Twitter 連携
       </Button>
     </Box>
