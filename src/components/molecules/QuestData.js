@@ -19,9 +19,13 @@ function QuestData({ children }) {
           note: "",
         };
       }
+      const base64str = searchParams
+          .get("p")
+          .replace(/-/g, "+")
+          .replace(/_/g, "/");
       const byteArray = new Uint8Array(
         window
-          .atob(searchParams.get("p"))
+          .atob(base64str)
           .split("")
           .map((c) => c.charCodeAt(0))
       );
