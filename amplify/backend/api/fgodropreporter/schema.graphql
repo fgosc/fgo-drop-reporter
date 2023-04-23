@@ -24,7 +24,9 @@ type Report
     ]
   ) {
   id: ID!
-  owner: String @auth(rules: [{ allow: owner, operations: [read, delete] }])
+  owner: String
+    @auth(rules: [{ allow: owner, operations: [read, delete] }])
+    @index(name: "listbyOwnerTimestamp", sortKeyFields: ["timestamp"])
   name: String
   twitter_id: String
   twitter_name: String

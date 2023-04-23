@@ -64,6 +64,49 @@ export const listReports = /* GraphQL */ `
     }
   }
 `;
+export const reportsByOwnerAndTimestamp = /* GraphQL */ `
+  query ReportsByOwnerAndTimestamp(
+    $owner: String!
+    $timestamp: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelReportFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    reportsByOwnerAndTimestamp(
+      owner: $owner
+      timestamp: $timestamp
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        owner
+        name
+        twitter_id
+        twitter_name
+        twitter_username
+        type
+        warName
+        questName
+        timestamp
+        runs
+        url
+        memo
+        dropObjects {
+          objectName
+          bonus
+          dropUpRate
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const reportsByTypeAndTimestamp = /* GraphQL */ `
   query ReportsByTypeAndTimestamp(
     $type: String!
