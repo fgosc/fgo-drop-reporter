@@ -1,11 +1,10 @@
-import { memo, useContext, useState } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import { memo, useState, useEffect } from "react";
+import { API, graphqlOperation, Auth } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import UserAttributesContext from "../../../contexts/UserAttributesContext";
 
-function createReportJSON(questname, runcount, lines, note, userAttributes) {
+function createReportJSON(questname, runcount, lines, note, user) {
   const normalWarNames = [
     "冬木",
     "オルレアン",
@@ -37,28 +36,30 @@ function createReportJSON(questname, runcount, lines, note, userAttributes) {
   let twitter_name = null; // custom:twitter_nameに対応
   let twitter_username = null; // custom:twitter_usernameに対応
 
-  if (
-    userAttributes["custom:twitter_id"] !== undefined &&
-    userAttributes["custom:twitter_id"] !== null &&
-    userAttributes["custom:twitter_id"] !== ""
-  ) {
-    twitter_id = userAttributes["custom:twitter_id"];
-  }
+  if (user && user.attributes) {
+    if (
+      user.attributes["custom:twitter_id"] !== undefined &&
+      user.attributes["custom:twitter_id"] !== null &&
+      user.attributes["custom:twitter_id"] !== ""
+    ) {
+      twitter_id = user.attributes["custom:twitter_id"];
+    }
 
-  if (
-    userAttributes["custom:twitter_name"] !== undefined &&
-    userAttributes["custom:twitter_name"] !== null &&
-    userAttributes["custom:twitter_name"] !== ""
-  ) {
-    twitter_name = userAttributes["custom:twitter_name"];
-  }
+    if (
+      user.attributes["custom:twitter_name"] !== undefined &&
+      user.attributes["custom:twitter_name"] !== null &&
+      user.attributes["custom:twitter_name"] !== ""
+    ) {
+      twitter_name = user.attributes["custom:twitter_name"];
+    }
 
-  if (
-    userAttributes["custom:twitter_username"] !== undefined &&
-    userAttributes["custom:twitter_username"] !== null &&
-    userAttributes["custom:twitter_username"] !== ""
-  ) {
-    twitter_username = userAttributes["custom:twitter_username"];
+    if (
+      user.attributes["custom:twitter_username"] !== undefined &&
+      user.attributes["custom:twitter_username"] !== null &&
+      user.attributes["custom:twitter_username"] !== ""
+    ) {
+      twitter_username = user.attributes["custom:twitter_username"];
+    }
   }
 
   // questname が normalWarNames + " " で始まる場合、" " で分割して warName と questName を設定
@@ -113,7 +114,7 @@ function createReportJSON(questname, runcount, lines, note, userAttributes) {
   );
 
   return {
-    name: userAttributes.name,
+    name: user?.attributes?.name,
     type,
     warName,
     questName,
@@ -130,7 +131,20 @@ function createReportJSON(questname, runcount, lines, note, userAttributes) {
 export const ReportButton = memo((props) => {
   const [loading, setLoading] = useState(false);
   const { questname, runcount, lines, note } = props;
-  const userAttributes = useContext(UserAttributesContext);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await Auth.currentAuthenticatedUser();
+        setUser(currentUser);
+        console.log(currentUser);
+      } catch (error) {
+        console.log("User is not authenticated:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const toast = useToast();
 
@@ -162,13 +176,7 @@ export const ReportButton = memo((props) => {
   }
 
   const handleClick = () => {
-    const reportData = createReportJSON(
-      questname,
-      runcount,
-      lines,
-      note,
-      userAttributes
-    );
+    const reportData = createReportJSON(questname, runcount, lines, note, user);
     console.log(reportData);
     AddReport(reportData);
   };

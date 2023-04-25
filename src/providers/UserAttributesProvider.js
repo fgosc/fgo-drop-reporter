@@ -1,9 +1,9 @@
 // UserAttributesProvider.js
 import { useState, useEffect } from "react";
 import { Auth } from "aws-amplify";
-import UserAttributesContext from "../../contexts/UserAttributesContext";
+import UserAttributesContext from "../contexts/UserAttributesContext";
 
-function UserAttributesProvider({ children }) {
+export const UserAttributesProvider = ({ children }) => {
   const [userAttributes, setUserAttributes] = useState({});
 
   useEffect(() => {
@@ -20,6 +20,6 @@ function UserAttributesProvider({ children }) {
       {children}
     </UserAttributesContext.Provider>
   );
-}
+};
 
-export default UserAttributesProvider;
+// export default UserAttributesProvider;
