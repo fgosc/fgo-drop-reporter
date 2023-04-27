@@ -1,60 +1,55 @@
-import { memo } from "react";
+import { memo, useEffect, useContext } from "react";
 
-// import { Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-import QuestData from "../../components/molecules/QuestData";
+import ReportParamContext from "../../contexts/ReportParamContext";
 import LayoutGrid from "../../components/templates/LayoutGrid";
 
 export const Home = memo(() => {
-  return (
-    <QuestData>
-      {({ questname, runs, lines, note }) => (
-        // <Authenticator>
-        // {({ signOut, user }) => (
-        <LayoutGrid
-          // signOut={signOut}
-          questname={questname}
-          runs={runs}
-          lines={lines}
-          note={note}
-        />
-        // )}
-        // </Authenticator>
-      )}
-    </QuestData>
-  );
+  const {
+    questname,
+    setQuestname,
+    runs,
+    setRuns,
+    lines,
+    setLines,
+    note,
+    setNote,
+  } = useContext(ReportParamContext);
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    console.log(`queryString: ${queryString}`);
+    const searchParams = new URLSearchParams(queryString);
+    const initParams = ((searchParams) => {
+      if (!searchParams.has("p")) {
+        return {
+          questname: "",
+          runs: 0,
+          lines: [],
+          note: "",
+        };
+      }
+      const base64str = searchParams
+        .get("p")
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
+      const byteArray = new Uint8Array(
+        window
+          .atob(base64str)
+          .split("")
+          .map((c) => c.charCodeAt(0))
+      );
+      const decoder = new TextDecoder();
+      const decodedParams = decoder.decode(byteArray);
+      console.log(`decodedParams: ${decodedParams}`);
+      return JSON.parse(decodedParams);
+    })(searchParams);
+    setQuestname(initParams.questname);
+    setRuns(initParams.runs);
+    setLines(initParams.lines);
+    setNote(initParams.note);
+  }, []);
+
+  return <LayoutGrid />;
 });
-
-// import React, { useState, useEffect } from "react";
-// import { Auth } from "aws-amplify";
-
-// const Home = () => {
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     const fetchUser = async () => {
-//       try {
-//         const currentUser = await Auth.currentAuthenticatedUser();
-//         setUser(currentUser);
-//       } catch (error) {
-//         console.log("User is not authenticated:", error);
-//       }
-//     };
-
-//     fetchUser();
-//   }, []);
-
-//   return (
-//     <div>
-//       <h1>ホーム画面</h1>
-//       {user ? (
-//         <p>こんにちは、{user.username} さん。ログイン状態です。</p>
-//       ) : (
-//         <p>こんにちは、ゲストさん。ログインしていません。</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Home;

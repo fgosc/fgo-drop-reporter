@@ -7,8 +7,7 @@ export type AmplifyDependentResourcesAttributes = {
     },
     "fgodropreporter": {
       "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string",
-      "GraphQLAPIKeyOutput": "string"
+      "GraphQLAPIIdOutput": "string"
     }
   },
   "auth": {

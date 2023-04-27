@@ -94,7 +94,7 @@ function createReportJSON(questname, runcount, lines, note, user) {
 
     const drop = {
       num: report,
-      stack,
+      ...(stack !== null && { stack }),
     };
 
     if (dropObjectsMap.has(material)) {
@@ -114,17 +114,17 @@ function createReportJSON(questname, runcount, lines, note, user) {
   );
 
   return {
-    name: user?.attributes?.name,
+    ...(user?.attributes?.name !== undefined && { name: user.attributes.name }),
     type,
-    warName,
+    ...(warName !== undefined && { warName }),
     questName,
     timestamp,
     runs,
     note,
     dropObjects,
-    twitter_id,
-    twitter_name,
-    twitter_username,
+    ...(twitter_id !== null && { twitter_id }),
+    ...(twitter_name !== null && { twitter_name }),
+    ...(twitter_username !== null && { twitter_username }),
   };
 }
 
@@ -181,12 +181,14 @@ export const ReportButton = memo((props) => {
     AddReport(reportData);
   };
 
+  console.log(user);
   return (
     <Button
       size="sm"
       colorScheme="twitter"
       isLoading={loading}
       onClick={handleClick}
+      isDisabled={user === null || user === undefined}
     >
       投稿する
     </Button>

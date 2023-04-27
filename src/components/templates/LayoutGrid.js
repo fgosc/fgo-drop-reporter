@@ -1,8 +1,12 @@
+import { useContext } from "react";
 import { Grid, GridItem } from "@chakra-ui/react";
 import MainContent from "../organisms/MainContent";
 import FooterComponent from "../organisms/FooterComponent";
+import ReportParamContext from "../../contexts/ReportParamContext";
 
-function LayoutGrid({ questname, runs, lines, note }) {
+// function LayoutGrid({ questname, runs, lines, note }) {
+function LayoutGrid() {
+  const { questname, runs, lines, note } = useContext(ReportParamContext);
   return (
     <Grid
       templateAreas={`"header header"
