@@ -1,5 +1,5 @@
 // useEditBox.js
-import { useContext, useCallback } from "react";
+import { useContext } from "react";
 import ReportParamContext from "../contexts/ReportParamContext";
 // TODO 本番環境 URL が確定したら差し替え
 const siteURL = "http://localhost:3000";
@@ -17,7 +17,7 @@ export const useEditBox = () => {
     setReportText,
   } = useContext(ReportParamContext);
 
-  const getRandomString = useCallback((length) => {
+  const getRandomString = (length) => {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
@@ -29,9 +29,9 @@ export const useEditBox = () => {
     }
 
     return result;
-  }, []);
+  }
 
-  const initNewLine = useCallback((maxOrder) => {
+  const initNewLine = (maxOrder) => {
     return {
       id: getRandomString(16),
       order: Math.max(maxOrder, 0) + 1,
@@ -39,7 +39,7 @@ export const useEditBox = () => {
       initial: 0,
       report: 0,
     };
-  }, []);
+  }
 
   const buildReportText = (questname, runcount, lines, note) => {
     const reportText = lines
@@ -60,23 +60,17 @@ ${reportText}
 ${note}
 `;
     return value;
-  };
+  }
 
-  const handleQuestNameChange = useCallback(
-    (newQuestName) => {
-      setQuestname(newQuestName);
-      setReportText(buildReportText(newQuestName, runs, lines, note));
-    },
-    [runs, lines, note, setQuestname, setReportText]
-  );
+  const handleQuestNameChange = (newQuestName) => {
+    setQuestname(newQuestName);
+    setReportText(buildReportText(newQuestName, runs, lines, note));
+  }
 
-  const handleRunCountChange = useCallback(
-    (newRunCount) => {
-      setRuns(newRunCount);
-      setReportText(buildReportText(questname, newRunCount, lines, note));
-    },
-    [questname, lines, note, setRuns, setReportText]
-  );
+  const handleRunCountChange = (newRunCount) => {
+    setRuns(newRunCount);
+    setReportText(buildReportText(questname, newRunCount, lines, note));
+  }
 
   const rebuildLines = (lines, hook, triggerLineId) => {
     let newlines = [];
@@ -87,54 +81,42 @@ ${note}
       newlines.push(line);
     }
     return newlines;
-  };
+  }
 
-  const handleMaterialChange = useCallback(
-    (id, material) => {
-      const hook = (line) => {
-        line.material = material;
-      };
-      const newlines = rebuildLines(lines, hook, id);
-      setLines(newlines);
-      setReportText(buildReportText(questname, runs, newlines, note));
-    },
-    [questname, runs, lines, note, setLines, setReportText]
-  );
+  const handleMaterialChange = (id, material) => {
+    const hook = (line) => {
+      line.material = material;
+    };
+    const newlines = rebuildLines(lines, hook, id);
+    setLines(newlines);
+    setReportText(buildReportText(questname, runs, newlines, note));
+  }
 
-  const handleMaterialReportCountChange = useCallback(
-    (id, count) => {
-      const hook = (line) => {
-        if (count < 0) {
-          line.report = "NaN";
-        } else {
-          line.report = count;
-        }
-      };
-      const newlines = rebuildLines(lines, hook, id);
-      setLines(newlines);
-      setReportText(buildReportText(questname, runs, newlines, note));
-    },
-    [lines, questname, runs, note, setLines, setReportText]
-  );
+  const handleMaterialReportCountChange = (id, count) => {
+    const hook = (line) => {
+      if (count < 0) {
+        line.report = "NaN";
+      } else {
+        line.report = count;
+      }
+    };
+    const newlines = rebuildLines(lines, hook, id);
+    setLines(newlines);
+    setReportText(buildReportText(questname, runs, newlines, note));
+  }
 
-  const handleNoteChange = useCallback(
-    (newNote) => {
-      setNote(newNote);
-      setReportText(buildReportText(questname, runs, lines, newNote));
-    },
-    [questname, runs, lines, setNote, setReportText]
-  );
+  const handleNoteChange = (newNote) => {
+    setNote(newNote);
+    setReportText(buildReportText(questname, runs, lines, newNote));
+  }
 
-  const handleLineDeleteButtonClick = useCallback(
-    (id) => {
-      const newlines = lines.filter((line) => {
-        return line.id !== id;
-      });
-      setLines(newlines);
-      setReportText(buildReportText(questname, runs, newlines, note));
-    },
-    [questname, runs, note, setLines, setReportText]
-  );
+  const handleLineDeleteButtonClick = (id) => {
+    const newlines = lines.filter((line) => {
+      return line.id !== id;
+    });
+    setLines(newlines);
+    setReportText(buildReportText(questname, runs, newlines, note));
+  }
 
   const findAboveLine = (lines, target) => {
     return lines.reduce((currentMax, line) => {
@@ -208,53 +190,47 @@ ${note}
     });
   };
 
-  const handleLineUpButtonClick = useCallback(
-    (id) => {
-      const linesCopy = [...lines];
-      const target = linesCopy.filter((line) => line.id === id);
+  const handleLineUpButtonClick = (id) => {
+    const linesCopy = [...lines];
+    const target = linesCopy.filter((line) => line.id === id);
 
-      if (target.length !== 1) {
-        return;
-      }
-      if (target[0].order <= 0) {
-        return;
-      }
+    if (target.length !== 1) {
+      return;
+    }
+    if (target[0].order <= 0) {
+      return;
+    }
 
-      changeLineOrder(linesCopy, target[0], "up");
-      setLines(linesCopy);
-      setReportText(buildReportText(questname, runs, linesCopy, note));
-    },
-    [questname, runs, note, setLines, setReportText]
-  );
+    changeLineOrder(linesCopy, target[0], "up");
+    setLines(linesCopy);
+    setReportText(buildReportText(questname, runs, linesCopy, note));
+  }
 
-  const handleLineDownButtonClick = useCallback(
-    (id) => {
-      const linesCopy = [...lines];
-      const target = linesCopy.filter((line) => line.id === id);
+  const handleLineDownButtonClick = (id) => {
+    const linesCopy = [...lines];
+    const target = linesCopy.filter((line) => line.id === id);
 
-      if (target.length !== 1) {
-        return;
-      }
-      const maxOrder = linesCopy.reduce((a, b) =>
-        a.order > b.order ? a.order : b.order
-      );
+    if (target.length !== 1) {
+      return;
+    }
+    const maxOrder = linesCopy.reduce((a, b) =>
+      a.order > b.order ? a.order : b.order
+    );
 
-      if (target[0].order >= maxOrder) {
-        return;
-      }
+    if (target[0].order >= maxOrder) {
+      return;
+    }
 
-      changeLineOrder(linesCopy, target[0], "down");
-      setLines(linesCopy);
-      setReportText(buildReportText(questname, runs, linesCopy, note));
-    },
-    [questname, runs, note, setLines, setReportText]
-  );
+    changeLineOrder(linesCopy, target[0], "down");
+    setLines(linesCopy);
+    setReportText(buildReportText(questname, runs, linesCopy, note));
+  }
 
-  const handleAddLineButtonClick = useCallback(() => {
+  const handleAddLineButtonClick = () => {
     const newLines = [...lines, initNewLine()];
     setLines(newLines);
     setReportText(buildReportText(questname, runs, newLines, note));
-  }, [questname, runs, note, setLines, setReportText]);
+  }
 
   return {
     getRandomString,
