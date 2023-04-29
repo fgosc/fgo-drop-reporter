@@ -5,14 +5,10 @@ import {
   FormLabel,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
-import "./RunCountEditor.css";
 
 const RunCountEditor = memo(({ onRunCountChange, runcount }) => {
   const handleChange = useCallback(
@@ -56,10 +52,6 @@ const RunCountEditor = memo(({ onRunCountChange, runcount }) => {
             onChange={handleChange}
           >
             <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
           </NumberInput>
           <Text color="red" as="b">
             周回数を設定してください。
@@ -75,10 +67,6 @@ const RunCountEditor = memo(({ onRunCountChange, runcount }) => {
             <InputRightElement className="NumberCheckIcon">
               <CheckIcon color="green.500" />
             </InputRightElement>
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
           </InputGroup>
         </NumberInput>
       </Box>
