@@ -1,6 +1,6 @@
 import { extendTheme, defineStyleConfig } from "@chakra-ui/react";
 
-const InputStyle =  {
+const InputStyle = {
   variants: {
     outline: {
       field: {
@@ -10,7 +10,8 @@ const InputStyle =  {
   }
 }
 
-const TextareaStyle =  defineStyleConfig({
+// NOTE: defineStyleConfig() を入れないと効果が適用されない理由はよくわかっていない
+const TextareaStyle = defineStyleConfig({
   variants: {
     outline: {
       background: "white",
@@ -30,7 +31,6 @@ const theme = extendTheme({
   components: {
     Input: InputStyle,
     NumberInput: InputStyle,
-    // NOTE: これを入れないと効果がない理由はよくわかっていない
     Textarea: TextareaStyle,
   },
 });
