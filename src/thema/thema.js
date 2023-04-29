@@ -1,4 +1,23 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme, defineStyleConfig } from "@chakra-ui/react";
+
+const InputStyle = {
+  variants: {
+    outline: {
+      field: {
+        background: "white",
+      }
+    }
+  }
+}
+
+// NOTE: defineStyleConfig() を入れないと効果が適用されない理由はよくわかっていない
+const TextareaStyle = defineStyleConfig({
+  variants: {
+    outline: {
+      background: "white",
+    }
+  }
+})
 
 const theme = extendTheme({
   styles: {
@@ -9,5 +28,11 @@ const theme = extendTheme({
       },
     },
   },
+  components: {
+    Input: InputStyle,
+    NumberInput: InputStyle,
+    Textarea: TextareaStyle,
+  },
 });
+
 export default theme;

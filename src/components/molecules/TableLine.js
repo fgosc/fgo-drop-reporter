@@ -33,13 +33,13 @@ class TableLine extends React.Component {
     return (
       <Tr>
         <Td verticalAlign="top">
-          <Button size="sm" mr={1} onClick={this.handleDeleteClick}>
+          <Button size="sm" bg="gray.300" mr={1} onClick={this.handleDeleteClick}>
             <i className="fas fa-trash"></i>
           </Button>
-          <Button size="sm" mr={1} onClick={this.handleUpClick}>
+          <Button size="sm" bg="gray.300" mr={1} onClick={this.handleUpClick}>
             <i className="fas fa-arrow-up"></i>
           </Button>
-          <Button size="sm" onClick={this.handleDownClick}>
+          <Button size="sm" bg="gray.300" onClick={this.handleDownClick}>
             <i className="fas fa-arrow-down"></i>
           </Button>
         </Td>

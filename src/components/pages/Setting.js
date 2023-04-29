@@ -1,12 +1,13 @@
 import { memo, useContext } from "react";
 import {
+  Container,
+  Text,
   Table,
   Thead,
   Tbody,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
 import TwitterAccount from "../molecules/TwitterAccount";
@@ -18,12 +19,11 @@ export const Setting = memo(() => {
   );
 
   return (
-    <>
+    <Container maxWidth="800px">
       {name ? (
         <>
-          <TableContainer>
-            <Table variant="simple" size="sm">
-              <TableCaption>登録内容</TableCaption>
+          <TableContainer mt={5} mb={5}>
+            <Table variant="simple">
               <Thead>
                 <Tr>
                   <Th>項目</Th>
@@ -55,10 +55,11 @@ export const Setting = memo(() => {
             </Table>
           </TableContainer>
           <TwitterAccount />
+          <Text mt={5}>Twitter のアカウント情報は Twitter と同期していません。情報を更新したい場合は、もう一度 Twitter 連携ボタンを押して認証してください。</Text>
         </>
       ) : (
-        <p>こんにちは、ゲストさん。設定ページの表示にはログインが必要です。</p>
+        <Text mt={5}>こんにちは、ゲストさん。設定ページの表示にはログインが必要です。</Text>
       )}
-    </>
+    </Container>
   );
 });
