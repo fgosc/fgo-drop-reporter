@@ -1,9 +1,9 @@
 // ReportViewer.js
-import React from "react";
+import { memo, useMemo } from "react";
 import { Box, HStack, Text, Tag, Textarea } from "@chakra-ui/react";
 
-class ReportViewer extends React.Component {
-  computeRows(rows) {
+const ReportViewer = memo(function ReportViewer({ reportText }) {
+  const computeRows = (rows) => {
     // TODO あまり洗練された手法とはいえない
     const screenWidth = window.screen.width;
 
@@ -17,24 +17,22 @@ class ReportViewer extends React.Component {
     }).length;
 
     return rows.length + overflows;
-  }
+  };
 
-  render() {
-    const rows = this.props.reportText.split("\n");
-    const numRows = this.computeRows(rows);
+  const rows = reportText.split("\n");
+  const numRows = useMemo(() => computeRows(rows), [rows]);
 
-    return (
-      <Box mt={2}>
-        <HStack spacing={2} mb={1}>
-          <Text>周回報告テキスト</Text>
-          <Tag>直接編集不可</Tag>
-        </HStack>
-        <Box className="control">
-          <Textarea readOnly value={this.props.reportText} rows={numRows} />
-        </Box>
+  return (
+    <Box mt={2}>
+      <HStack spacing={2} mb={1}>
+        <Text>周回報告テキスト</Text>
+        <Tag>直接編集不可</Tag>
+      </HStack>
+      <Box className="control">
+        <Textarea readOnly value={reportText} rows={numRows} />
       </Box>
-    );
-  }
-}
+    </Box>
+  );
+});
 
 export default ReportViewer;

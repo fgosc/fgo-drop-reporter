@@ -1,5 +1,5 @@
 // ReportParamProvider.js
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReportParamContext from "../contexts/ReportParamContext";
 
 export const ReportParamProvider = ({ children }) => {
@@ -7,6 +7,7 @@ export const ReportParamProvider = ({ children }) => {
   const [runs, setRuns] = useState(0);
   const [lines, setLines] = useState([]);
   const [note, setNote] = useState("");
+  const [reportText, setReportText] = useState("");
 
   return (
     <ReportParamContext.Provider
@@ -19,6 +20,8 @@ export const ReportParamProvider = ({ children }) => {
         setLines,
         note,
         setNote,
+        reportText,
+        setReportText,
       }}
     >
       {children}

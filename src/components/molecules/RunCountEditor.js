@@ -1,5 +1,5 @@
 // RunCountEditor.js
-import React from "react";
+import { memo, useCallback } from "react";
 import { Box, Button, Text } from "@chakra-ui/react";
 import {
   FormLabel,
@@ -12,44 +12,48 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
-import "./RunCountEditor.css"
+import "./RunCountEditor.css";
 
-class RunCountEditor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.addValue = this.addValue.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+const RunCountEditor = memo(({ onRunCountChange, runcount }) => {
+  const handleChange = useCallback(
+    (value) => {
+      onRunCountChange(value);
+    },
+    [onRunCountChange]
+  );
 
-  handleChange(value) {
-    this.props.onRunCountChange(value);
-  }
+  const addValue = useCallback(
+    (delta) => {
+      let runcountInt = parseInt(runcount);
+      if (isNaN(runcountInt)) {
+        runcountInt = 0;
+      }
+      let v = runcountInt + delta;
+      if (v < 0) {
+        v = 0;
+      }
+      onRunCountChange(v);
+    },
+    [onRunCountChange, runcount]
+  );
 
-  addValue(delta) {
-    let runcount = parseInt(this.props.runcount);
-    // ブランクなど数値でない場合に NaN になる可能性がある。
-    // その場合は強制的に 0 にする。
-    if (isNaN(runcount)) {
-      runcount = 0;
-    }
-    let v = runcount + delta;
-    if (v < 0) {
-      v = 0;
-    }
-    this.props.onRunCountChange(v);
-  }
+  const handleClick = useCallback(
+    (event) => {
+      addValue(parseInt(event.target.textContent));
+    },
+    [addValue]
+  );
 
-  buildInputNode() {
-    const _runcount = parseInt(this.props.runcount);
+  const buildInputNode = useCallback(() => {
+    const _runcount = parseInt(runcount);
     if (_runcount <= 0 || isNaN(_runcount)) {
       return (
         <Box>
           <NumberInput
             isInvalid
             min={0}
-            value={this.props.runcount}
-            onChange={this.handleChange}
+            value={runcount}
+            onChange={handleChange}
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -65,11 +69,7 @@ class RunCountEditor extends React.Component {
     }
     return (
       <Box>
-        <NumberInput
-          min={0}
-          value={this.props.runcount}
-          onChange={this.handleChange}
-        >
+        <NumberInput min={0} value={runcount} onChange={handleChange}>
           <InputGroup>
             <NumberInputField />
             <InputRightElement className="NumberCheckIcon">
@@ -83,64 +83,43 @@ class RunCountEditor extends React.Component {
         </NumberInput>
       </Box>
     );
-  }
+  }, [handleChange, runcount]);
 
-  handleClick(event) {
-    this.addValue(parseInt(event.target.textContent));
-  }
-
-  render() {
-    const inputNode = this.buildInputNode();
-    return (
+  const inputNode = buildInputNode();
+  return (
+    <Box>
       <Box>
-        <Box>
-          <FormLabel>周回数</FormLabel>
-          {inputNode}
-        </Box>
-        <Box mt={1}>
-          <Button size="sm" colorScheme="red" mr={1} onClick={this.handleClick}>
-            -1000
-          </Button>
-          <Button size="sm" colorScheme="red" mr={1} onClick={this.handleClick}>
-            -100
-          </Button>
-          <Button size="sm" colorScheme="red" mr={1} onClick={this.handleClick}>
-            -10
-          </Button>
-          <Button size="sm" colorScheme="red" mr={1} onClick={this.handleClick}>
-            -1
-          </Button>
-          <Button
-            size="sm"
-            colorScheme="blue"
-            mr={1}
-            onClick={this.handleClick}
-          >
-            +1
-          </Button>
-          <Button
-            size="sm"
-            colorScheme="blue"
-            mr={1}
-            onClick={this.handleClick}
-          >
-            +10
-          </Button>
-          <Button
-            size="sm"
-            colorScheme="blue"
-            mr={1}
-            onClick={this.handleClick}
-          >
-            +100
-          </Button>
-          <Button size="sm" colorScheme="blue" onClick={this.handleClick}>
-            +1000
-          </Button>
-        </Box>
+        <FormLabel>周回数</FormLabel>
+        {inputNode}
       </Box>
-    );
-  }
-}
+      <Box mt={1}>
+        <Button size="sm" colorScheme="red" mr={1} onClick={handleClick}>
+          -1000
+        </Button>
+        <Button size="sm" colorScheme="red" mr={1} onClick={handleClick}>
+          -100
+        </Button>
+        <Button size="sm" colorScheme="red" mr={1} onClick={handleClick}>
+          -10
+        </Button>
+        <Button size="sm" colorScheme="red" mr={1} onClick={handleClick}>
+          -1
+        </Button>
+        <Button size="sm" colorScheme="blue" mr={1} onClick={handleClick}>
+          +1
+        </Button>
+        <Button size="sm" colorScheme="blue" mr={1} onClick={handleClick}>
+          +10
+        </Button>
+        <Button size="sm" colorScheme="blue" mr={1} onClick={handleClick}>
+          +100
+        </Button>
+        <Button size="sm" colorScheme="blue" onClick={handleClick}>
+          +1000
+        </Button>
+      </Box>
+    </Box>
+  );
+});
 
 export default RunCountEditor;

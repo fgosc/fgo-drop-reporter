@@ -1,15 +1,17 @@
+import { memo } from "react";
 import { Box, Text, Textarea } from "@chakra-ui/react";
 
-function NoteEditor(props) {
+const NoteEditor = memo(function NoteEditor({ onNoteChange, note }) {
   const handleChange = (event) => {
-    props.onNoteChange(event.target.value);
+    onNoteChange(event.target.value);
   };
+
   return (
     <Box mt={2}>
       <Text>コメント</Text>
-      <Textarea value={props.note} onChange={handleChange} />
+      <Textarea value={note} onChange={handleChange} />
     </Box>
   );
-}
+});
 
 export default NoteEditor;

@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useContext } from "react";
 import { Auth } from "aws-amplify";
 import {
   Table,
@@ -11,8 +11,23 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import TwitterAccount from "../molecules/TwitterAccount";
+import ReportParamContext from "../../contexts/ReportParamContext";
 
 export const Setting = memo(() => {
+  const {
+    questname,
+    setQuestname,
+    runs,
+    setRuns,
+    lines,
+    setLines,
+    note,
+    setNote,
+    reportText,
+    setReportText,
+  } = useContext(ReportParamContext);
+  console.log(questname);
+  console.log(runs);
   const [user, setUser] = useState(null);
   useEffect(() => {
     const fetchUser = async () => {

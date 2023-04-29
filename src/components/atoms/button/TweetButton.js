@@ -1,16 +1,16 @@
 // TweetButton.js
-import React from "react";
+import { memo } from "react";
 import { Button } from "@chakra-ui/react";
 
-function TweetButton(props) {
+const TweetButton = memo(function TweetButton({ reportText, reportPosted }) {
   const handleClick = () => {
     const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      props.reportText
+      reportText
     )}`;
     window.open(tweetURL, "_blank");
   };
   // 報告が投稿されたらツイート可能
-  const disabled = !props.reportPosted;
+  const disabled = !reportPosted;
   return (
     <Button
       size="sm"
@@ -21,6 +21,6 @@ function TweetButton(props) {
       ツイートする
     </Button>
   );
-}
+});
 
 export default TweetButton;
