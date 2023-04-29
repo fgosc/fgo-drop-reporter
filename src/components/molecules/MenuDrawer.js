@@ -1,5 +1,4 @@
-import { memo, useState, useEffect } from "react";
-import { Auth } from "aws-amplify";
+import { memo, useContext } from "react";
 import {
   Tag,
   Center,
@@ -9,8 +8,10 @@ import {
   DrawerContent,
   DrawerOverlay,
 } from "@chakra-ui/react";
+import UserAttributesContext from "../../contexts/UserAttributesContext";
 
 export const MenuDrawer = memo((props) => {
+  const { name, twitterId } = useContext(UserAttributesContext);
   const {
     onClose,
     isOpen,
@@ -19,20 +20,6 @@ export const MenuDrawer = memo((props) => {
     handleLogin,
     handleLogout,
   } = props;
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const currentUser = await Auth.currentAuthenticatedUser();
-        setUser(currentUser);
-        console.log(currentUser);
-      } catch (error) {
-        console.log("User is not authenticated:", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   return (
     <Drawer placement="left" size="xs" onClose={onClose} isOpen={isOpen}>
@@ -40,10 +27,10 @@ export const MenuDrawer = memo((props) => {
         <DrawerContent>
           <DrawerBody p={0} bg="gray.100">
             <Center>
-              {user ? (
+              {name ? (
                 <>
-                  {user.attributes.name}{" "}
-                  {user.attributes["custom:twitter_id"] ? (
+                  {name}
+                  {twitterId ? (
                     <Tag colorScheme="twitter" ml={2}>
                       Twitter連携済み
                     </Tag>
@@ -63,7 +50,7 @@ export const MenuDrawer = memo((props) => {
             <Button w="100%" onClick={onClickSetting}>
               設定
             </Button>
-            {user ? (
+            {name ? (
               <Button w="100%" onClick={handleLogout}>
                 ログアウト
               </Button>

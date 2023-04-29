@@ -1,5 +1,4 @@
-import { memo, useState, useEffect, useContext } from "react";
-import { Auth } from "aws-amplify";
+import { memo, useContext } from "react";
 import {
   Table,
   Thead,
@@ -11,40 +10,16 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import TwitterAccount from "../molecules/TwitterAccount";
-import ReportParamContext from "../../contexts/ReportParamContext";
+import UserAttributesContext from "../../contexts/UserAttributesContext";
 
 export const Setting = memo(() => {
-  const {
-    questname,
-    setQuestname,
-    runs,
-    setRuns,
-    lines,
-    setLines,
-    note,
-    setNote,
-    reportText,
-    setReportText,
-  } = useContext(ReportParamContext);
-  console.log(questname);
-  console.log(runs);
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const currentUser = await Auth.currentAuthenticatedUser();
-        setUser(currentUser);
-      } catch (error) {
-        console.log("User is not authenticated:", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { name, email, twitterId, twitterName, twitterUsername } = useContext(
+    UserAttributesContext
+  );
 
   return (
     <>
-      {user ? (
+      {name ? (
         <>
           <TableContainer>
             <Table variant="simple" size="sm">
@@ -58,23 +33,23 @@ export const Setting = memo(() => {
               <Tbody>
                 <Tr>
                   <Td>ユーザ名</Td>
-                  <Td>{user?.attributes?.name}</Td>
+                  <Td>{name}</Td>
                 </Tr>
                 <Tr>
                   <Td>Email</Td>
-                  <Td>{user?.attributes?.email}</Td>
+                  <Td>{email}</Td>
                 </Tr>
                 <Tr>
                   <Td>Twitter ID</Td>
-                  <Td>{user?.attributes?.["custom:twitter_id"]}</Td>
-                </Tr>
-                <Tr>
-                  <Td>Twitter ユーザー名</Td>
-                  <Td>{user?.attributes?.["custom:twitter_username"]}</Td>
+                  <Td>{twitterId}</Td>
                 </Tr>
                 <Tr>
                   <Td>Twitter 表示名</Td>
-                  <Td>{user?.attributes?.["custom:twitter_name"]}</Td>
+                  <Td>{twitterName}</Td>
+                </Tr>
+                <Tr>
+                  <Td>Twitter ユーザー名</Td>
+                  <Td>{twitterUsername}</Td>
                 </Tr>
               </Tbody>
             </Table>

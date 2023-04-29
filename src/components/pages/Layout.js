@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useCallback, useState, useEffect } from "react";
+import { memo, useCallback, useContext } from "react";
 import {
   Box,
   Flex,
@@ -16,23 +16,11 @@ import { MenuIconButton } from "../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../molecules/MenuDrawer";
 import { SignInButton } from "../atoms/button/SignInButton";
 import { SignOutButton } from "../atoms/button/SignOutButton";
+import UserAttributesContext from "../../contexts/UserAttributesContext";
 
 export const Layout = memo(() => {
+  const { name, twitterId } = useContext(UserAttributesContext);
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const currentUser = await Auth.currentAuthenticatedUser();
-        setUser(currentUser);
-        console.log(currentUser);
-      } catch (error) {
-        console.log("User is not authenticated:", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const handleLogout = async () => {
     try {
@@ -43,6 +31,7 @@ export const Layout = memo(() => {
     }
   };
   const handleLogin = () => {
+    console.log("check");
     navigate("/login");
     onClose();
   };
@@ -85,16 +74,16 @@ export const Layout = memo(() => {
           flexGrow={2}
           display={{ base: "none", md: "flex" }}
         >
-          {user ? (
+          {name ? (
             <Box pr={4}>
               <Link onClick={onClickSetting}>設定</Link>
             </Box>
           ) : null}
           <Spacer />
-          {user ? (
+          {name ? (
             <Box pr={4}>
-              {user.attributes.name}
-              {user.attributes["custom:twitter_id"] ? (
+              {name}
+              {twitterId ? (
                 <Tag colorScheme="twitter" ml={2}>
                   Twitter連携済み
                 </Tag>
@@ -105,7 +94,7 @@ export const Layout = memo(() => {
               )}
             </Box>
           ) : null}
-          {user ? (
+          {name ? (
             <SignOutButton onClick={handleLogout} />
           ) : (
             <SignInButton onClick={handleLogin} />
