@@ -30,7 +30,8 @@
     ],
     "userpoolClientReadAttributes": [
       "email",
-      "name"
+      "name",
+      "email_verified"
     ],
     "userpoolClientLambdaRole": "fgodro3fdc0324_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
@@ -41,7 +42,7 @@
     "usernameAttributes": [
       "email"
     ],
-    "userPoolGroups": true,
+    "userPoolGroups": false,
     "adminQueries": true,
     "triggers": {},
     "hostedUI": false,
@@ -66,10 +67,10 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "authProviders": [],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "permissions": []
+    "permissions": [],
+    "authProviders": []
   }
 }
