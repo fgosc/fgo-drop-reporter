@@ -1,4 +1,4 @@
-import { Box, Link, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Link, Spacer, Text, VStack } from "@chakra-ui/react";
 
 function FooterContent() {
   return (
@@ -7,9 +7,34 @@ function FooterContent() {
         <Text fontSize="sm" textAlign="center">
           fgosc project
         </Text>
-        <Link href="/privacy-policy" fontSize="sm" color="teal.500">
-          プライバシーポリシー
-        </Link>
+        <HStack spacing={4}>
+          <Link href="/privacy-policy" fontSize="sm" color="teal.500">
+            プライバシーポリシー
+          </Link>
+          <Link href="/contact" fontSize="sm" color="teal.500">
+            お問い合わせ
+          </Link>
+          <Spacer />
+          <Text fontSize="sm" textAlign="center">
+            その他のツール:
+          </Text>
+          <Link
+            href="https://fgosccalc.max747.org/"
+            fontSize="sm"
+            color="teal.500"
+            isExternal
+          >
+            差分チェッカー(fgosccalc)
+          </Link>
+          <Link
+            href="https://fgojunks.max747.org/fgosccnt/"
+            fontSize="sm"
+            color="teal.500"
+            isExternal
+          >
+            スクショ解析(fgosccnt)
+          </Link>
+        </HStack>
       </VStack>
     </Box>
   );

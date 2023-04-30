@@ -1,5 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, useCallback, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { Auth } from "aws-amplify";
 import {
   Box,
   Flex,
@@ -8,10 +11,11 @@ import {
   useDisclosure,
   Spacer,
   Tag,
+  List,
+  ListItem,
+  ListIcon,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import { Auth } from "aws-amplify";
+import { InfoIcon } from "@chakra-ui/icons";
 import { MenuIconButton } from "../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../molecules/MenuDrawer";
 import { SignInButton } from "../atoms/button/SignInButton";
@@ -48,6 +52,11 @@ export const Layout = memo(() => {
     onClose();
   }, []);
 
+  const onClickDocumentation = useCallback(() => {
+    navigate("/service");
+    onClose();
+  }, []);
+
   return (
     <Flex direction="column" minHeight="100vh">
       <Flex
@@ -80,6 +89,12 @@ export const Layout = memo(() => {
               <Link onClick={onClickSetting}>設定</Link>
             </Box>
           ) : null}
+          <List>
+            <ListItem>
+              <ListIcon as={InfoIcon} color="gray.500" />
+              <Link onClick={onClickDocumentation}>当サイトの利用法</Link>
+            </ListItem>
+          </List>
           <Spacer />
           {name ? (
             <Box pr={4}>
@@ -108,6 +123,7 @@ export const Layout = memo(() => {
         onClose={onClose}
         onCLickHome={onClickHome}
         onClickSetting={onClickSetting}
+        onClickDocumentation={onClickDocumentation}
         handleLogin={handleLogin}
         handleLogout={handleLogout}
       />
