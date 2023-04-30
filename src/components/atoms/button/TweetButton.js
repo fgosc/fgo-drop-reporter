@@ -1,8 +1,10 @@
 // TweetButton.js
-import { memo } from "react";
+import { memo, useContext } from "react";
 import { Button } from "@chakra-ui/react";
+import ReportParamContext from "../../../contexts/ReportParamContext";
 
-const TweetButton = memo(function TweetButton({ reportText, reportPosted }) {
+const TweetButton = memo(function TweetButton({ reportText }) {
+  const { isTweetButtonEnabled } = useContext(ReportParamContext);
   const handleClick = () => {
     const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       reportText
@@ -10,13 +12,12 @@ const TweetButton = memo(function TweetButton({ reportText, reportPosted }) {
     window.open(tweetURL, "_blank");
   };
   // 報告が投稿されたらツイート可能
-  const disabled = !reportPosted;
   return (
     <Button
       size="sm"
       colorScheme="twitter"
       onClick={handleClick}
-      isDisabled={disabled}
+      isDisabled={!isTweetButtonEnabled}
     >
       ツイートする
     </Button>

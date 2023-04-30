@@ -1,13 +1,14 @@
-import { memo, useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Amplify, API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import UserAttributesContext from "../../../contexts/UserAttributesContext";
+import ReportParamContext from "../../../contexts/ReportParamContext";
 
 function createReportJSON(
   questname,
-  runcount,
+  runs,
   lines,
   note,
   name,
@@ -43,33 +44,6 @@ function createReportJSON(
   let warName = null;
   let questName = questname;
 
-  // if (name) {
-  //   if (
-  //     twitterId !== undefined &&
-  //     twitterId !== null &&
-  //     twitterId !== ""
-  //   ) {
-  //     twitterId = user.attributes["custom:twitter_id"];
-  //   }
-
-  //   if (
-  //     twitterUsername !== undefined &&
-  //     twitterUsername !== null &&
-  //     twitterUsername !== ""
-  //   ) {
-  //     twitter_name = user.attributes["custom:twitter_name"];
-  //   }
-
-  //   if (
-  //     user.attributes["custom:twitter_username"] !== undefined &&
-  //     user.attributes["custom:twitter_username"] !== null &&
-  //     user.attributes["custom:twitter_username"] !== ""
-  //   ) {
-  //     twitter_username = user.attributes["custom:twitter_username"];
-  //   }
-  // }
-
-  // questname が normalWarNames + " " で始まる場合、" " で分割して warName と questName を設定
   for (const normalWarName of normalWarNames) {
     if (questname.startsWith(normalWarName + " ")) {
       const splitQuestName = questname.split(" ");
@@ -79,7 +53,6 @@ function createReportJSON(
     }
   }
 
-  const runs = runcount;
   const timestamp = Math.floor(new Date().getTime() / 1000);
   const type = normalWarNames.includes(warName) ? "normal" : "event";
 
@@ -139,14 +112,31 @@ function createReportJSON(
   };
 }
 
-export const ReportButton = memo((props) => {
+export const ReportButton = () => {
   const { name, twitterId, twitterName, twitterUsername } = useContext(
     UserAttributesContext
   );
+
+  const {
+    questname,
+    runs,
+    lines,
+    note,
+    isReportButtonEnabled,
+    setIsReportButtonEnabled,
+    setIsTweetButtonEnabled,
+  } = useContext(ReportParamContext);
   const [loading, setLoading] = useState(false);
-  const { questname, runcount, lines, note } = props;
 
   const toast = useToast();
+  useEffect(() => {
+    const hasNonEmptyMaterial = lines.some((line) => line.material !== "");
+    if (runs > 0 && questname != "" && hasNonEmptyMaterial) {
+      setIsReportButtonEnabled(true);
+    } else {
+      setIsReportButtonEnabled(false);
+    }
+  }, [runs, questname, lines]);
 
   async function AddReport(report) {
     setLoading(true);
@@ -172,6 +162,8 @@ export const ReportButton = memo((props) => {
         duration: 9000,
         isClosable: true,
       });
+      setIsReportButtonEnabled(false);
+      setIsTweetButtonEnabled(true);
     } catch (error) {
       console.error("Error creating report:", error);
       toast({
@@ -188,7 +180,7 @@ export const ReportButton = memo((props) => {
   const handleClick = () => {
     const reportData = createReportJSON(
       questname,
-      runcount,
+      runs,
       lines,
       note,
       name,
@@ -206,9 +198,9 @@ export const ReportButton = memo((props) => {
       colorScheme="twitter"
       isLoading={loading}
       onClick={handleClick}
-      // isDisabled={name === null || name === undefined}
+      isDisabled={!isReportButtonEnabled}
     >
       投稿する
     </Button>
   );
-});
+};

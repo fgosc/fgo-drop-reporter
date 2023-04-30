@@ -8,6 +8,8 @@ export const ReportParamProvider = ({ children }) => {
   const [lines, setLines] = useState([]);
   const [note, setNote] = useState("");
   const [reportText, setReportText] = useState("");
+  const [isReportButtonEnabled, setIsReportButtonEnabled] = useState(false);
+  const [isTweetButtonEnabled, setIsTweetButtonEnabled] = useState(false);
 
   return (
     <ReportParamContext.Provider
@@ -22,6 +24,10 @@ export const ReportParamProvider = ({ children }) => {
         setNote,
         reportText,
         setReportText,
+        isReportButtonEnabled,
+        setIsReportButtonEnabled,
+        isTweetButtonEnabled,
+        setIsTweetButtonEnabled,
       }}
     >
       {children}

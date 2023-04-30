@@ -91,14 +91,39 @@ const initLines = (lines) => {
   return newlines;
 };
 
+const checkValues = (questname, runs, lines, note) => {
+  if (questname !== "") {
+    return true;
+  }
+  if (runs !== 0) {
+    return true;
+  }
+  if (lines.length !== 0) {
+    return true;
+  }
+  if (note !== "") {
+    return true;
+  }
+  return false;
+};
+
 export const Home = memo(() => {
   const { buildReportText } = useEditBox();
 
-  const { setQuestname, runs, setRuns, setLines, setNote, setReportText } =
-    useContext(ReportParamContext);
+  const {
+    questname,
+    setQuestname,
+    runs,
+    setRuns,
+    lines,
+    setLines,
+    note,
+    setNote,
+    setReportText,
+  } = useContext(ReportParamContext);
 
   useEffect(() => {
-    if (runs > 0) {
+    if (checkValues(questname, runs, lines, note)) {
       return;
     }
     const queryString = window.location.search;

@@ -1,5 +1,5 @@
 // EditBox.js
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Box, Stack } from "@chakra-ui/react";
 import ReportTable from "../organisms/ReportTable";
 import QuestNameEditor from "../molecules/QuestNameEditor";
@@ -52,12 +52,7 @@ const EditBox = () => {
       <NoteEditor note={note} onNoteChange={handleNoteChange} />
       <ReportViewer reportText={reportText} />
       <Stack spacing={2} direction="row" mt={2}>
-        <ReportButton
-          questname={questname}
-          runcount={runs}
-          lines={lines}
-          note={note}
-        />
+        <ReportButton />
         <TweetButton reportText={reportText} />
       </Stack>
     </Box>
