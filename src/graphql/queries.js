@@ -7,9 +7,9 @@ export const getReport = /* GraphQL */ `
       id
       owner
       name
-      twitter_id
-      twitter_name
-      twitter_username
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
@@ -39,9 +39,49 @@ export const listReports = /* GraphQL */ `
         id
         owner
         name
-        twitter_id
-        twitter_name
-        twitter_username
+        twitterId
+        twitterName
+        twitterUsername
+        type
+        warName
+        questName
+        timestamp
+        runs
+        note
+        dropObjects {
+          objectName
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listPostsBySpecificOwner = /* GraphQL */ `
+  query ListPostsBySpecificOwner(
+    $owner: String!
+    $timestamp: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelReportFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostsBySpecificOwner(
+      owner: $owner
+      timestamp: $timestamp
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        owner
+        name
+        twitterId
+        twitterName
+        twitterUsername
         type
         warName
         questName
@@ -79,9 +119,9 @@ export const listPostsSortedByTimestamp = /* GraphQL */ `
         id
         owner
         name
-        twitter_id
-        twitter_name
-        twitter_username
+        twitterId
+        twitterName
+        twitterUsername
         type
         warName
         questName

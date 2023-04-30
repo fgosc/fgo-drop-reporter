@@ -1,5 +1,5 @@
 import { memo, useState, useContext } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import { Amplify, API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
@@ -90,6 +90,10 @@ function createReportJSON(
     if (material === "") {
       continue;
     }
+    // reportが"NaN"の場合は無視する
+    if (report === "NaN") {
+      continue;
+    }
     const regex = /(\(x|\(\+)(\d+)\)/;
     const match = material.match(regex);
 
@@ -147,6 +151,16 @@ export const ReportButton = memo((props) => {
   async function AddReport(report) {
     setLoading(true);
     try {
+      // ログイン状態によって認証方式を切り替える
+      if (name) {
+        Amplify.configure({
+          aws_appsync_authenticationType: "AMAZON_COGNITO_USER_POOLS",
+        });
+      } else {
+        Amplify.configure({
+          aws_appsync_authenticationType: "API_KEY",
+        });
+      }
       const result = await API.graphql(
         graphqlOperation(createReport, { input: report })
       );
@@ -192,7 +206,7 @@ export const ReportButton = memo((props) => {
       colorScheme="twitter"
       isLoading={loading}
       onClick={handleClick}
-      isDisabled={name === null || name === undefined}
+      // isDisabled={name === null || name === undefined}
     >
       投稿する
     </Button>

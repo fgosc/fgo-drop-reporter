@@ -10,9 +10,9 @@ export const onCreateReport = /* GraphQL */ `
       id
       owner
       name
-      twitter_id
-      twitter_name
-      twitter_username
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
@@ -40,9 +40,9 @@ export const onUpdateReport = /* GraphQL */ `
       id
       owner
       name
-      twitter_id
-      twitter_name
-      twitter_username
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
@@ -70,9 +70,9 @@ export const onDeleteReport = /* GraphQL */ `
       id
       owner
       name
-      twitter_id
-      twitter_name
-      twitter_username
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
