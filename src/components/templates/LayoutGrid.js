@@ -1,19 +1,16 @@
 import { useContext } from "react";
 import { Grid, GridItem } from "@chakra-ui/react";
 import MainContent from "../organisms/MainContent";
-import FooterComponent from "../organisms/FooterComponent";
 import ReportParamContext from "../../contexts/ReportParamContext";
 
-// function LayoutGrid({ questname, runs, lines, note }) {
 function LayoutGrid() {
   const { questname, runs, lines, note } = useContext(ReportParamContext);
   return (
     <Grid
       templateAreas={`"header header"
-                  "main main"
-                  "footer footer"`}
+                  "main main"`}
       // gridTemplateRows={"50px 1fr 30px"}
-      gridTemplateRows={"1px 1fr 30px"}
+      gridTemplateRows={"1px 1fr"}
       gridTemplateColumns={"150px 1fr"}
       h="200px"
       gap="1"
@@ -21,6 +18,7 @@ function LayoutGrid() {
       fontWeight="bold"
       maxWidth="800px"
       margin="auto"
+      minHeight="calc(100vh - 64px)"
     >
       <GridItem pl="2" area={"main"}>
         <MainContent
@@ -29,9 +27,6 @@ function LayoutGrid() {
           lines={lines}
           note={note}
         />
-      </GridItem>
-      <GridItem pl="2" area={"footer"}>
-        <FooterComponent />
       </GridItem>
     </Grid>
   );

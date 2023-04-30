@@ -17,6 +17,7 @@ import { MenuDrawer } from "../molecules/MenuDrawer";
 import { SignInButton } from "../atoms/button/SignInButton";
 import { SignOutButton } from "../atoms/button/SignOutButton";
 import UserAttributesContext from "../../contexts/UserAttributesContext";
+import FooterComponent from "../organisms/FooterComponent";
 
 export const Layout = memo(() => {
   const { name, twitterId } = useContext(UserAttributesContext);
@@ -48,7 +49,7 @@ export const Layout = memo(() => {
   }, []);
 
   return (
-    <>
+    <Flex direction="column" minHeight="100vh">
       <Flex
         as="nav"
         bg="teal.500"
@@ -110,7 +111,10 @@ export const Layout = memo(() => {
         handleLogin={handleLogin}
         handleLogout={handleLogout}
       />
-      <Outlet />
-    </>
+      <Box flex="1">
+        <Outlet />
+      </Box>
+      <FooterComponent />
+    </Flex>
   );
 });
