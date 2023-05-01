@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { Amplify, API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
@@ -59,6 +59,10 @@ function createReportJSON(
   const dropObjectsMap = new Map();
 
   for (let { material, report } of lines) {
+    // 最初の文字が "!" の場合、削除する
+    if (material.startsWith("!")) {
+      material = material.slice(1);
+    }
     // materialが空文字列の場合は無視する
     if (material === "") {
       continue;
@@ -131,26 +135,16 @@ export const ReportButton = () => {
   const toast = useToast();
   useEffect(() => {
     const hasNonEmptyMaterial = lines.some((line) => line.material !== "");
-    if (runs > 0 && questname != "" && hasNonEmptyMaterial) {
+    if (runs > 0 && questname !== "" && hasNonEmptyMaterial) {
       setIsReportButtonEnabled(true);
     } else {
       setIsReportButtonEnabled(false);
     }
-  }, [runs, questname, lines]);
+  }, [runs, questname, lines, setIsReportButtonEnabled]);
 
   async function AddReport(report) {
     setLoading(true);
     try {
-      // ログイン状態によって認証方式を切り替える
-      if (name) {
-        Amplify.configure({
-          aws_appsync_authenticationType: "AMAZON_COGNITO_USER_POOLS",
-        });
-      } else {
-        Amplify.configure({
-          aws_appsync_authenticationType: "API_KEY",
-        });
-      }
       const result = await API.graphql(
         graphqlOperation(createReport, { input: report })
       );

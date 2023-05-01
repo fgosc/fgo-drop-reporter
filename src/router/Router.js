@@ -10,6 +10,8 @@ import { Page404 } from "../components/pages/Page404";
 import PrivacyPolicy from "../components/pages/PrivacyPolicy";
 import Contact from "../components/pages/Contact";
 import Service from "../components/pages/Service";
+import ReportsNormal from "../components/pages/ReportsNormal";
+import ReportDetails from "../components/organisms/ReportDetails";
 
 export const Router = memo(() => {
   return (
@@ -22,6 +24,8 @@ export const Router = memo(() => {
         <Route path="service" element={<Service />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="reports/normal" element={<ReportsNormal />} />
+        <Route path="reports/:id" element={<ReportDetails />} />
       </Route>
       <Route path="login" element={<Login />} />
       <Route path="*" element={<Page404 />} />

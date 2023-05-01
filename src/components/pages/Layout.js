@@ -36,7 +36,6 @@ export const Layout = memo(() => {
     }
   };
   const handleLogin = () => {
-    console.log("check");
     navigate("/login");
     onClose();
   };

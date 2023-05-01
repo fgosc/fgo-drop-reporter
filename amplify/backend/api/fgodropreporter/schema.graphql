@@ -35,12 +35,7 @@ type Report
   ) {
   id: ID!
   owner: String
-    #    @auth(rules: [{ allow: owner, operations: [read, delete] }])
-    @index(
-      name: "BySpecificOwner"
-      sortKeyFields: ["timestamp"]
-      queryField: "listPostsBySpecificOwner"
-    )
+  # @auth(rules: [{ allow: owner, operations: [read, delete] }])
   name: String
   twitterId: String
   twitterName: String
@@ -49,7 +44,7 @@ type Report
     @index(
       name: "SortByTimestamp"
       sortKeyFields: ["timestamp"]
-      queryField: "listPostsSortedByTimestamp"
+      queryField: "listReportsSortedByTimestamp"
     )
   warName: String
   questName: String!
