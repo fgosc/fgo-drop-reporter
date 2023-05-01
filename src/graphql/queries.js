@@ -58,48 +58,8 @@ export const listReports = /* GraphQL */ `
     }
   }
 `;
-export const listPostsBySpecificOwner = /* GraphQL */ `
-  query ListPostsBySpecificOwner(
-    $owner: String!
-    $timestamp: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelReportFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPostsBySpecificOwner(
-      owner: $owner
-      timestamp: $timestamp
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        owner
-        name
-        twitterId
-        twitterName
-        twitterUsername
-        type
-        warName
-        questName
-        timestamp
-        runs
-        note
-        dropObjects {
-          objectName
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const listPostsSortedByTimestamp = /* GraphQL */ `
-  query ListPostsSortedByTimestamp(
+export const listReportsSortedByTimestamp = /* GraphQL */ `
+  query ListReportsSortedByTimestamp(
     $type: String!
     $timestamp: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
@@ -107,7 +67,7 @@ export const listPostsSortedByTimestamp = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    listPostsSortedByTimestamp(
+    listReportsSortedByTimestamp(
       type: $type
       timestamp: $timestamp
       sortDirection: $sortDirection
