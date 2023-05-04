@@ -35,7 +35,19 @@ type Report
   ) {
   id: ID!
   owner: String
-  # @auth(rules: [{ allow: owner, operations: [read, delete] }])
+    @auth(
+      rules: [
+        { allow: owner, operations: [read, delete] }
+        {
+          allow: groups
+          provider: userPools
+          groups: ["Admin"]
+          operations: [read, update, delete]
+        }
+        { allow: private, provider: userPools, operations: [read] }
+        { allow: public, operations: [read] }
+      ]
+    )
   name: String
   twitterId: String
   twitterName: String
@@ -48,8 +60,22 @@ type Report
     )
   warName: String
   questName: String!
+  questType: String!
   timestamp: Int!
   runs: Int!
   note: String
   dropObjects: [DropObject!]!
+}
+
+type UserInfo {
+  name: String
+  # twitterId: String
+  # twitterName: String
+  # twitterUsername: String
+}
+
+type Query {
+  getUserInfo(username: String!): String
+    @function(name: "getUserInfo-${env}")
+    @auth(rules: [{ allow: private, provider: userPools }, { allow: public }])
 }

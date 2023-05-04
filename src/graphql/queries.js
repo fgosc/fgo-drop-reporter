@@ -13,6 +13,7 @@ export const getReport = /* GraphQL */ `
       type
       warName
       questName
+      questType
       timestamp
       runs
       note
@@ -45,6 +46,7 @@ export const listReports = /* GraphQL */ `
         type
         warName
         questName
+        questType
         timestamp
         runs
         note
@@ -85,6 +87,7 @@ export const listReportsSortedByTimestamp = /* GraphQL */ `
         type
         warName
         questName
+        questType
         timestamp
         runs
         note
@@ -96,5 +99,10 @@ export const listReportsSortedByTimestamp = /* GraphQL */ `
       }
       nextToken
     }
+  }
+`;
+export const getUserInfo = /* GraphQL */ `
+  query GetUserInfo($username: String!) {
+    getUserInfo(username: $username)
   }
 `;

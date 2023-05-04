@@ -46,6 +46,12 @@ export const Layout = memo(() => {
     navigate("/");
     onClose();
   }, []);
+
+  const onClickReport = useCallback(() => {
+    navigate("/reports/all");
+    onClose();
+  }, []);
+
   const onClickSetting = useCallback(() => {
     navigate("/setting");
     onClose();
@@ -83,6 +89,9 @@ export const Layout = memo(() => {
           flexGrow={2}
           display={{ base: "none", md: "flex" }}
         >
+          <Box pr={4}>
+            <Link onClick={onClickReport}>報告一覧</Link>
+          </Box>
           {name ? (
             <Box pr={4}>
               <Link onClick={onClickSetting}>設定</Link>
@@ -121,6 +130,7 @@ export const Layout = memo(() => {
         isOpen={isOpen}
         onClose={onClose}
         onCLickHome={onClickHome}
+        onClickReport={onClickReport}
         onClickSetting={onClickSetting}
         onClickDocumentation={onClickDocumentation}
         handleLogin={handleLogin}

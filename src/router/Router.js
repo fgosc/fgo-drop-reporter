@@ -10,13 +10,14 @@ import { Page404 } from "../components/pages/Page404";
 import PrivacyPolicy from "../components/pages/PrivacyPolicy";
 import Contact from "../components/pages/Contact";
 import Service from "../components/pages/Service";
-import ReportsNormal from "../components/pages/ReportsNormal";
-import ReportDetails from "../components/organisms/ReportDetails";
+import ReportDetails from "../components/templates/ReportDetails";
+import ReportsList from "../components/pages/ReportsList";
+import OwnerInfo from "../components/pages/OwnerInfo";
+import ReportslistByOwner from "../components/pages/ReportsListByOwner";
 
 export const Router = memo(() => {
   return (
     <Routes>
-      {/* <Route path="/" element={<Login />} /> */}
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="401" element={<Page401 />} />
@@ -24,8 +25,10 @@ export const Router = memo(() => {
         <Route path="service" element={<Service />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route path="contact" element={<Contact />} />
-        <Route path="reports/normal" element={<ReportsNormal />} />
+        <Route path="reports/all" element={<ReportsList />} />
         <Route path="reports/:id" element={<ReportDetails />} />
+        <Route path="/owners/:owner" element={<OwnerInfo />} />
+        <Route path="/owners/:owner/reports" element={<ReportslistByOwner />} />
       </Route>
       <Route path="login" element={<Login />} />
       <Route path="*" element={<Page404 />} />

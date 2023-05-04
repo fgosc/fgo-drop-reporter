@@ -16,6 +16,7 @@ export const createReport = /* GraphQL */ `
       type
       warName
       questName
+      questType
       timestamp
       runs
       note
@@ -46,6 +47,7 @@ export const updateReport = /* GraphQL */ `
       type
       warName
       questName
+      questType
       timestamp
       runs
       note
@@ -76,6 +78,7 @@ export const deleteReport = /* GraphQL */ `
       type
       warName
       questName
+      questType
       timestamp
       runs
       note

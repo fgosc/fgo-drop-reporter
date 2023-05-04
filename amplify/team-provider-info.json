@@ -20,6 +20,10 @@
         "AdminQueries7751f16c": {
           "deploymentBucketName": "amplify-fgodropreporter-staging-112936-deployment",
           "s3Key": "amplify-builds/AdminQueries7751f16c-34714a2b787269677470-build.zip"
+        },
+        "getUserInfo": {
+          "deploymentBucketName": "amplify-fgodropreporter-staging-112936-deployment",
+          "s3Key": "amplify-builds/getUserInfo-49647a73766b342f4c43-build.zip"
         }
       },
       "api": {

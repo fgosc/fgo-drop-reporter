@@ -117,6 +117,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "getUserInfo": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fgodropreporter"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -133,6 +147,22 @@
         {
           "category": "function",
           "resourceName": "AdminQueries7751f16c"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserInfo_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserInfo"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserInfo_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserInfo"
         }
       ]
     }

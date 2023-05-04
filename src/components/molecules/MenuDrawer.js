@@ -16,6 +16,7 @@ export const MenuDrawer = memo((props) => {
     onClose,
     isOpen,
     onCLickHome,
+    onClickReport,
     onClickSetting,
     onClickDocumentation,
     handleLogin,
@@ -47,6 +48,9 @@ export const MenuDrawer = memo((props) => {
             </Center>
             <Button w="100%" onClick={onCLickHome}>
               TOP
+            </Button>
+            <Button w="100%" onClick={onClickReport}>
+              報告一覧
             </Button>
             {name ? (
               <Button w="100%" onClick={onClickSetting}>

@@ -97,7 +97,7 @@ const PrivacyPolicy = () => {
         <Text>
           プライバシーポリシーに関する問い合わせは、以下の連絡先にお願いします。
         </Text>
-        <UnorderedList ml={6}>
+        <UnorderedList ml={6} pl={5}>
           <ListItem>
             fgophi ＠ gmail.com (" ＠ " を"@"に変換してください)
           </ListItem>
