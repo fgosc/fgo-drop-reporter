@@ -97,7 +97,7 @@ const ReportDetails = () => {
         duration: 9000,
         isClosable: true,
       });
-      navigate("/reports/normal");
+      navigate("/reports/all");
     } catch (error) {
       console.error("Error deleting report:", error);
       toast({

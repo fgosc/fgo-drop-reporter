@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import { Amplify, API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
 import { Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
@@ -54,7 +54,8 @@ function createReportJSON(
   }
 
   const timestamp = Math.floor(new Date().getTime() / 1000);
-  const type = normalWarNames.includes(warName) ? "normal" : "event";
+  const type = "open";
+  const questType = normalWarNames.includes(warName) ? "normal" : "event";
 
   const dropObjectsMap = new Map();
 
@@ -67,14 +68,16 @@ function createReportJSON(
     if (material === "") {
       continue;
     }
-    // reportが"NaN"の場合は無視する
+    // reportが"NaN"の場合は-1にする
     if (report === "NaN") {
-      continue;
+      report = -1;
+    } else {
+      report = parseInt(report, 10);
     }
     const regex = /(\(x|\(\+)(\d+)\)/;
     const match = material.match(regex);
 
-    let stack = null;
+    let stack = 1;
     if (match) {
       material = material.replace(regex, "").trim();
       stack = parseInt(match[2], 10);
@@ -106,6 +109,7 @@ function createReportJSON(
     type,
     ...(warName !== undefined && { warName }),
     questName,
+    questType,
     timestamp,
     runs,
     note,
@@ -145,6 +149,16 @@ export const ReportButton = () => {
   async function AddReport(report) {
     setLoading(true);
     try {
+      // ログイン状態によって認証方式を切り替える
+      if (name) {
+        Amplify.configure({
+          aws_appsync_authenticationType: "AMAZON_COGNITO_USER_POOLS",
+        });
+      } else {
+        Amplify.configure({
+          aws_appsync_authenticationType: "API_KEY",
+        });
+      }
       const result = await API.graphql(
         graphqlOperation(createReport, { input: report })
       );
