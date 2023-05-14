@@ -6,6 +6,13 @@ import { useToast } from "@chakra-ui/react";
 import UserAttributesContext from "../../../contexts/UserAttributesContext";
 import ReportParamContext from "../../../contexts/ReportParamContext";
 
+function convertStringToNumber(str) {
+  str = str.replace(/百万/g, "000000");
+  str = str.replace(/万/g, "0000");
+  str = str.replace(/千/g, "000");
+  return parseInt(str, 10);
+}
+
 function createReportJSON(
   questname,
   runs,
@@ -74,13 +81,13 @@ function createReportJSON(
     } else {
       report = parseInt(report, 10);
     }
-    const regex = /(\(x|\(\+)(\d+)\)/;
+    const regex = /(\(x|\(\+)(.+)\)/;
     const match = material.match(regex);
 
     let stack = 1;
     if (match) {
       material = material.replace(regex, "").trim();
-      stack = parseInt(match[2], 10);
+      stack = convertStringToNumber(match[2]);
     }
 
     const drop = {
