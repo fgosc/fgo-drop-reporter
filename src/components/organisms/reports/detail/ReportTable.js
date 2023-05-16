@@ -31,6 +31,14 @@ const ReportTable = ({ dropObjects, setDropObjects }) => {
     setDropObjects(updatedDropObjects);
   };
 
+  const formatStack = (stack) => {
+    return stack
+      .toString()
+      .replace(/000000$/, "百万")
+      .replace(/0000$/, "万")
+      .replace(/000$/, "千");
+  };
+
   return (
     <Table variant="simple">
       <Thead>
@@ -50,7 +58,13 @@ const ReportTable = ({ dropObjects, setDropObjects }) => {
                   {dropObject.objectName}
                   {drop.stack !== null &&
                     drop.stack !== 1 &&
-                    `(x${drop.stack})`}
+                    `${
+                      dropObject.objectName === "QP" ||
+                      dropObject.objectName.endsWith("ポイント") ||
+                      dropObject.objectName.endsWith("P")
+                        ? "(+"
+                        : "(x"
+                    }${formatStack(drop.stack)})`}
                   {drop.num === -1 ? "NaN" : drop.num}
                 </Td>
                 <Td>
