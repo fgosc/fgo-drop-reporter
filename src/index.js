@@ -10,7 +10,9 @@ import config from "./aws-exports";
 // 既存の API Gateway を追加
 config.aws_cloud_logic_custom.push({
   name: "twitter",
-  endpoint: "https://4j8usr5oma.execute-api.ap-northeast-1.amazonaws.com/prod",
+  // endpoint: "https://4j8usr5oma.execute-api.ap-northeast-1.amazonaws.com/prod",
+  // endpoint: "https://qav1dnxun7.execute-api.ap-northeast-1.amazonaws.com/prod",
+  endpoint: process.env.REACT_APP_TWITTER_ENDPOINT,
   region: "ap-northeast-1",
 });
 Amplify.configure(config);
