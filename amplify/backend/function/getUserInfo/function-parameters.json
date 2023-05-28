@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "auth": {
+      "fgodropreporter": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

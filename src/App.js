@@ -1,35 +1,54 @@
-import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports";
 import { Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-import logo from "./logo.svg";
-import "./App.css";
 
-Amplify.configure(awsconfig);
+// import UserAttributesProvider from "./components/organisms/UserAttributesProvider";
+// import QuestData from "./components/molecules/QuestData";
+// import LayoutGrid from "./components/templates/LayoutGrid";
 
-function App() {
+// function AppContainer() {
+//   return (
+//     <UserAttributesProvider>
+//       <QuestData>
+//         {({ questname, runs, lines, note }) => (
+//           <Authenticator>
+//             {({ signOut, user }) => (
+//               <LayoutGrid
+//                 signOut={signOut}
+//                 questname={questname}
+//                 runs={runs}
+//                 lines={lines}
+//                 note={note}
+//               />
+//             )}
+//           </Authenticator>
+//         )}
+//       </QuestData>
+//     </UserAttributesProvider>
+//   );
+// }
+
+// export default function App() {
+//   return <AppContainer />;
+// }
+
+import { ChakraProvider } from "@chakra-ui/react";
+import { BrowserRouter } from "react-router-dom";
+
+import theme from "./thema/thema";
+import { Router } from "./router/Router";
+import { UserAttributesProvider } from "./providers/UserAttributesProvider";
+import { ReportParamProvider } from "./providers/ReportParamProvider";
+
+export default function App() {
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        </div>
-      )}
-    </Authenticator>
+    <UserAttributesProvider>
+      <ReportParamProvider>
+        <ChakraProvider theme={theme}>
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+        </ChakraProvider>
+      </ReportParamProvider>
+    </UserAttributesProvider>
   );
 }
-
-export default App;

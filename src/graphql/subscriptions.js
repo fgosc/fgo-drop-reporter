@@ -9,21 +9,23 @@ export const onCreateReport = /* GraphQL */ `
     onCreateReport(filter: $filter, owner: $owner) {
       id
       owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
+      questType
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -38,21 +40,23 @@ export const onUpdateReport = /* GraphQL */ `
     onUpdateReport(filter: $filter, owner: $owner) {
       id
       owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
+      questType
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -67,21 +71,23 @@ export const onDeleteReport = /* GraphQL */ `
     onDeleteReport(filter: $filter, owner: $owner) {
       id
       owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
+      questType
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt

@@ -6,21 +6,23 @@ export const getReport = /* GraphQL */ `
     getReport(id: $id) {
       id
       owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
+      questType
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -37,22 +39,70 @@ export const listReports = /* GraphQL */ `
       items {
         id
         owner
+        name
+        twitterId
+        twitterName
+        twitterUsername
         type
         warName
         questName
+        questType
         timestamp
         runs
-        url
-        memo
+        note
         dropObjects {
           objectName
-          bonus
-          dropUpRate
         }
         createdAt
         updatedAt
       }
       nextToken
     }
+  }
+`;
+export const listReportsSortedByTimestamp = /* GraphQL */ `
+  query ListReportsSortedByTimestamp(
+    $type: String!
+    $timestamp: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelReportFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReportsSortedByTimestamp(
+      type: $type
+      timestamp: $timestamp
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        owner
+        name
+        twitterId
+        twitterName
+        twitterUsername
+        type
+        warName
+        questName
+        questType
+        timestamp
+        runs
+        note
+        dropObjects {
+          objectName
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUserInfo = /* GraphQL */ `
+  query GetUserInfo($username: String!) {
+    getUserInfo(username: $username)
   }
 `;

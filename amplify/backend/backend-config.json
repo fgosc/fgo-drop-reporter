@@ -37,18 +37,21 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2024-04-17T11:06:54.048Z",
+                "apiKeyExpirationDate": "2024-04-29T01:09:39.438Z",
                 "apiKeyExpirationDays": 365,
-                "description": "for public access"
+                "description": "for develop"
               },
               "authenticationType": "API_KEY"
+            },
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authfgodropreporter"
+              }
             }
           ],
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authfgodropreporter"
-            }
+            "authenticationType": "AWS_IAM"
           }
         }
       },
@@ -114,6 +117,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "getUserInfo": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "fgodropreporter"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -130,6 +147,22 @@
         {
           "category": "function",
           "resourceName": "AdminQueries7751f16c"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserInfo_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserInfo"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserInfo_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserInfo"
         }
       ]
     }

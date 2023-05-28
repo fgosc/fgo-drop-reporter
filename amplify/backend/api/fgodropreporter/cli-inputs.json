@@ -4,16 +4,20 @@
     "apiName": "fgodropreporter",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "AMAZON_COGNITO_USER_POOLS",
-      "cognitoUserPoolId": "authfgodropreporter"
+      "mode": "AWS_IAM"
     },
     "additionalAuthTypes": [
       {
         "mode": "API_KEY",
         "expirationTime": 365,
-        "apiKeyExpirationDate": "2024-04-17T11:06:54.048Z",
-        "keyDescription": "for public access"
+        "apiKeyExpirationDate": "2024-04-29T01:09:39.438Z",
+        "keyDescription": "for develop"
+      },
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authfgodropreporter"
       }
-    ]
+    ],
+    "conflictResolution": {}
   }
 }

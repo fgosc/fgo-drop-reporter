@@ -20,7 +20,80 @@
         "AdminQueries7751f16c": {
           "deploymentBucketName": "amplify-fgodropreporter-staging-112936-deployment",
           "s3Key": "amplify-builds/AdminQueries7751f16c-34714a2b787269677470-build.zip"
-        }
+        },
+        "getUserInfo": {
+          "deploymentBucketName": "amplify-fgodropreporter-staging-112936-deployment",
+          "s3Key": "amplify-builds/getUserInfo-49647a73766b342f4c43-build.zip"
+        },
+        "fgodropreporter": {}
+      },
+      "api": {
+        "AdminQueries": {},
+        "fgodropreporter": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fgodropreporter-prod-204215-authRole",
+      "UnauthRoleArn": "arn:aws:iam::814356150097:role/amplify-fgodropreporter-prod-204215-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::814356150097:role/amplify-fgodropreporter-prod-204215-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-fgodropreporter-prod-204215-deployment",
+      "UnauthRoleName": "amplify-fgodropreporter-prod-204215-unauthRole",
+      "StackName": "amplify-fgodropreporter-prod-204215",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:814356150097:stack/amplify-fgodropreporter-prod-204215/b453bf30-f3de-11ed-83cd-0a629cdd37c9",
+      "AmplifyAppId": "d26ud1eav58757"
+    },
+    "categories": {
+      "auth": {
+        "fgodropreporter": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "AdminQueries7751f16c": {
+          "deploymentBucketName": "amplify-fgodropreporter-prod-204215-deployment",
+          "s3Key": "amplify-builds/AdminQueries7751f16c-34714a2b787269677470-build.zip"
+        },
+        "getUserInfo": {
+          "deploymentBucketName": "amplify-fgodropreporter-prod-204215-deployment",
+          "s3Key": "amplify-builds/getUserInfo-49647a73766b342f4c43-build.zip"
+        },
+        "fgodropreporter": {}
+      },
+      "api": {
+        "AdminQueries": {},
+        "fgodropreporter": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fgodropreporter-dev-205215-authRole",
+      "UnauthRoleArn": "arn:aws:iam::814356150097:role/amplify-fgodropreporter-dev-205215-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::814356150097:role/amplify-fgodropreporter-dev-205215-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-fgodropreporter-dev-205215-deployment",
+      "UnauthRoleName": "amplify-fgodropreporter-dev-205215-unauthRole",
+      "StackName": "amplify-fgodropreporter-dev-205215",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:814356150097:stack/amplify-fgodropreporter-dev-205215/1a05b940-f3e0-11ed-8423-06832379e2fb",
+      "AmplifyAppId": "d26ud1eav58757"
+    },
+    "categories": {
+      "auth": {
+        "fgodropreporter": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "AdminQueries7751f16c": {
+          "deploymentBucketName": "amplify-fgodropreporter-dev-205215-deployment",
+          "s3Key": "amplify-builds/AdminQueries7751f16c-34714a2b787269677470-build.zip"
+        },
+        "getUserInfo": {
+          "deploymentBucketName": "amplify-fgodropreporter-dev-205215-deployment",
+          "s3Key": "amplify-builds/getUserInfo-49647a73766b342f4c43-build.zip"
+        },
+        "fgodropreporter": {}
       },
       "api": {
         "AdminQueries": {},

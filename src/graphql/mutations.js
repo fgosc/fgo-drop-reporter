@@ -1,6 +1,37 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createReport = /* GraphQL */ `
+  mutation CreateReport(
+    $input: CreateReportInput!
+    $condition: ModelReportConditionInput
+  ) {
+    createReport(input: $input, condition: $condition) {
+      id
+      owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
+      type
+      warName
+      questName
+      questType
+      timestamp
+      runs
+      note
+      dropObjects {
+        objectName
+        drops {
+          num
+          stack
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const updateReport = /* GraphQL */ `
   mutation UpdateReport(
     $input: UpdateReportInput!
@@ -9,21 +40,23 @@ export const updateReport = /* GraphQL */ `
     updateReport(input: $input, condition: $condition) {
       id
       owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
+      questType
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
@@ -38,50 +71,23 @@ export const deleteReport = /* GraphQL */ `
     deleteReport(input: $input, condition: $condition) {
       id
       owner
+      name
+      twitterId
+      twitterName
+      twitterUsername
       type
       warName
       questName
+      questType
       timestamp
       runs
-      url
-      memo
+      note
       dropObjects {
         objectName
         drops {
           num
           stack
         }
-        bonus
-        dropUpRate
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createReport = /* GraphQL */ `
-  mutation CreateReport(
-    $input: CreateReportInput!
-    $condition: ModelReportConditionInput
-  ) {
-    createReport(input: $input, condition: $condition) {
-      id
-      owner
-      type
-      warName
-      questName
-      timestamp
-      runs
-      url
-      memo
-      dropObjects {
-        objectName
-        drops {
-          num
-          stack
-        }
-        bonus
-        dropUpRate
       }
       createdAt
       updatedAt
