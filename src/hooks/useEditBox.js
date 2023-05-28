@@ -2,7 +2,7 @@
 import { useContext } from "react";
 import ReportParamContext from "../contexts/ReportParamContext";
 // TODO 本番環境 URL が確定したら差し替え
-const siteURL = "http://localhost:3000";
+const siteURL = "https://fgodrop.max747.org/";
 
 export const useEditBox = () => {
   const {
@@ -29,7 +29,7 @@ export const useEditBox = () => {
     }
 
     return result;
-  }
+  };
 
   const initNewLine = (maxOrder) => {
     return {
@@ -39,7 +39,7 @@ export const useEditBox = () => {
       initial: 0,
       report: 0,
     };
-  }
+  };
 
   const buildReportText = (questname, runcount, lines, note) => {
     const reportText = lines
@@ -60,17 +60,17 @@ ${reportText}
 ${note}
 `;
     return value;
-  }
+  };
 
   const handleQuestNameChange = (newQuestName) => {
     setQuestname(newQuestName);
     setReportText(buildReportText(newQuestName, runs, lines, note));
-  }
+  };
 
   const handleRunCountChange = (newRunCount) => {
     setRuns(newRunCount);
     setReportText(buildReportText(questname, newRunCount, lines, note));
-  }
+  };
 
   const rebuildLines = (lines, hook, triggerLineId) => {
     let newlines = [];
@@ -81,7 +81,7 @@ ${note}
       newlines.push(line);
     }
     return newlines;
-  }
+  };
 
   const handleMaterialChange = (id, material) => {
     const hook = (line) => {
@@ -90,7 +90,7 @@ ${note}
     const newlines = rebuildLines(lines, hook, id);
     setLines(newlines);
     setReportText(buildReportText(questname, runs, newlines, note));
-  }
+  };
 
   const handleMaterialReportCountChange = (id, count) => {
     const hook = (line) => {
@@ -103,12 +103,12 @@ ${note}
     const newlines = rebuildLines(lines, hook, id);
     setLines(newlines);
     setReportText(buildReportText(questname, runs, newlines, note));
-  }
+  };
 
   const handleNoteChange = (newNote) => {
     setNote(newNote);
     setReportText(buildReportText(questname, runs, lines, newNote));
-  }
+  };
 
   const handleLineDeleteButtonClick = (id) => {
     const newlines = lines.filter((line) => {
@@ -116,7 +116,7 @@ ${note}
     });
     setLines(newlines);
     setReportText(buildReportText(questname, runs, newlines, note));
-  }
+  };
 
   const findAboveLine = (lines, target) => {
     return lines.reduce((currentMax, line) => {
@@ -204,7 +204,7 @@ ${note}
     changeLineOrder(linesCopy, target[0], "up");
     setLines(linesCopy);
     setReportText(buildReportText(questname, runs, linesCopy, note));
-  }
+  };
 
   const handleLineDownButtonClick = (id) => {
     const linesCopy = [...lines];
@@ -224,13 +224,13 @@ ${note}
     changeLineOrder(linesCopy, target[0], "down");
     setLines(linesCopy);
     setReportText(buildReportText(questname, runs, linesCopy, note));
-  }
+  };
 
   const handleAddLineButtonClick = () => {
     const newLines = [...lines, initNewLine()];
     setLines(newLines);
     setReportText(buildReportText(questname, runs, newLines, note));
-  }
+  };
 
   return {
     getRandomString,
