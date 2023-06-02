@@ -117,7 +117,9 @@ export const Layout = memo(() => {
                 </Tag>
               )}
             </Box>
-          ) : null}
+          ) : (
+            <Box pr={4}>ゲスト</Box>
+          )}
           {name ? (
             <SignOutButton onClick={handleLogout} />
           ) : (
@@ -145,7 +147,7 @@ export const Layout = memo(() => {
               )}
             </Box>
           ) : (
-            <Box>ゲスト</Box>
+            <Box pr={4}>ゲスト</Box>
           )}
         </Flex>
         <MenuIconButton onOpen={onOpen} />
