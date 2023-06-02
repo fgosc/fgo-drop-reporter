@@ -124,6 +124,30 @@ export const Layout = memo(() => {
             <SignInButton onClick={handleLogin} />
           )}
         </Flex>
+        <Flex
+          align="center"
+          fontSize="sm"
+          flexGrow={2}
+          display={{ base: "flex", md: "none" }}
+        >
+          <Spacer />
+          {name ? (
+            <Box pr={4}>
+              {name}
+              {twitterId ? (
+                <Tag colorScheme="twitter" ml={2}>
+                  Twitter連携済み
+                </Tag>
+              ) : (
+                <Tag colorScheme="yellow" ml={2}>
+                  Twitter未連携
+                </Tag>
+              )}
+            </Box>
+          ) : (
+            <Box>ゲスト</Box>
+          )}
+        </Flex>
         <MenuIconButton onOpen={onOpen} />
       </Flex>
       <MenuDrawer

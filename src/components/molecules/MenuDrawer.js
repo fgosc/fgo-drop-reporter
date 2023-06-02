@@ -1,7 +1,5 @@
 import { memo, useContext } from "react";
 import {
-  Tag,
-  Center,
   Button,
   Drawer,
   DrawerBody,
@@ -11,7 +9,7 @@ import {
 import UserAttributesContext from "../../contexts/UserAttributesContext";
 
 export const MenuDrawer = memo((props) => {
-  const { name, twitterId } = useContext(UserAttributesContext);
+  const { name } = useContext(UserAttributesContext);
   const {
     onClose,
     isOpen,
@@ -28,24 +26,6 @@ export const MenuDrawer = memo((props) => {
       <DrawerOverlay>
         <DrawerContent>
           <DrawerBody p={0} bg="gray.100">
-            <Center>
-              {name ? (
-                <>
-                  {name}
-                  {twitterId ? (
-                    <Tag colorScheme="twitter" ml={2}>
-                      Twitter連携済み
-                    </Tag>
-                  ) : (
-                    <Tag colorScheme="yellow" ml={2}>
-                      Twitter未連携
-                    </Tag>
-                  )}
-                </>
-              ) : (
-                <>ゲスト</>
-              )}
-            </Center>
             <Button w="100%" onClick={onCLickHome}>
               TOP
             </Button>
