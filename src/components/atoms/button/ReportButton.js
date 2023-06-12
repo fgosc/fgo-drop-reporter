@@ -30,6 +30,20 @@ function createReportJSON(
     "オケアノス",
     "ロンドン",
     "北米",
+    "ブラックヒルズ",
+    "リバートン",
+    "デンバー",
+    "デミング",
+    "ダラス",
+    "アルカトラズ",
+    "デモイン",
+    "モントゴメリー",
+    "ラボック",
+    "アレクサンドリア",
+    "カーニー",
+    "シャーロット",
+    "ワシントン",
+    "シカゴ",
     "キャメロット",
     "バビロニア",
     "新宿",
@@ -46,6 +60,19 @@ function createReportJSON(
     "アヴァロン",
     "トラオム",
     "ナウイ・ミクトラン",
+    "オーディール・コール",
+    "ペーパームーン",
+  ];
+
+  const chaldeaGateWarNames = [
+    "宝物庫",
+    "剣の修練場",
+    "弓の修練場",
+    "槍の修練場",
+    "狂の修練場",
+    "騎の修練場",
+    "術の修練場",
+    "殺の修練場",
   ];
 
   let warName = null;
@@ -56,6 +83,13 @@ function createReportJSON(
       const splitQuestName = questname.split(" ");
       warName = splitQuestName[0];
       questName = splitQuestName.slice(1).join(" ");
+      break;
+    }
+  }
+  for (const chaldeaGateWarName of chaldeaGateWarNames) {
+    if (questname.startsWith(chaldeaGateWarName + " ")) {
+      const splitQuestName = questname.split(" ");
+      warName = "カルデアゲート";
       break;
     }
   }
