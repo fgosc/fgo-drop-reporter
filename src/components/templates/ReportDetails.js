@@ -53,10 +53,10 @@ const ReportDetails = () => {
           user.signInUserSession.accessToken.payload["cognito:groups"];
         setIsEditable(
           (groups && groups.includes("Admin")) ||
-            (report &&
-              report.owner !== null &&
+            (reportData.data.getReport &&
+              reportData.data.getReport.owner !== null &&
               cognitoId !== null &&
-              report.owner === cognitoId)
+              reportData.data.getReport.owner === cognitoId)
         );
       } catch (error) {
         console.error("Error fetching report:", error);
