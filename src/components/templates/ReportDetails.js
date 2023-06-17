@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Amplify, Auth, API, graphqlOperation } from "aws-amplify";
 import { getReport } from "../../graphql/queries";
 import { deleteReport, updateReport } from "../../graphql/mutations";
 import { Box, VStack, Text, Button, Center, HStack } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import UserAttributesContext from "../../contexts/UserAttributesContext";
 import ReportHeader from "../organisms/reports/detail/ReportHeader";
 import ReportForm from "../organisms/reports/detail/ReportForm";
 import ReportDeleteDialog from "../organisms/reports/detail/ReportDeleteDialog";
@@ -23,7 +22,6 @@ const configureAmplify = (cognitoId) => {
 };
 
 const ReportDetails = () => {
-  const { cognitoId } = useContext(UserAttributesContext);
   const [amplifyConfigured, setAmplifyConfigured] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
@@ -38,6 +36,20 @@ const ReportDetails = () => {
   const [runs, setRuns] = useState(0);
   const [note, setNote] = useState("");
   const [dropObjects, setDropObjects] = useState([]);
+  const [cognitoId, setCognitoId] = useState(null);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const userInfo = await Auth.currentUserInfo();
+      console.log(`userInfo: ${JSON.stringify(userInfo)}`);
+      if (userInfo === null) {
+        setCognitoId(null);
+      } else {
+        setCognitoId(userInfo.username);
+      }
+    };
+    getUserInfo();
+  }, []);
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -64,7 +76,7 @@ const ReportDetails = () => {
     };
 
     fetchReport();
-  }, [amplifyConfigured]);
+  }, [amplifyConfigured, cognitoId, id]);
 
   useEffect(() => {
     configureAmplify(cognitoId);
