@@ -1,10 +1,20 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Amplify, API, graphqlOperation } from "aws-amplify";
 import { createReport } from "../../../graphql/mutations";
-import { Button } from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/react";
+import {
+  Button,
+  useToast,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  useDisclosure,
+} from "@chakra-ui/react";
 import UserAttributesContext from "../../../contexts/UserAttributesContext";
 import ReportParamContext from "../../../contexts/ReportParamContext";
+import { sha256 } from "js-sha256";
 
 function convertStringToNumber(str) {
   str = str.replace(/百万/g, "000000");
@@ -161,7 +171,27 @@ function createReportJSON(
   };
 }
 
+function createReportHash(report) {
+  // copy the report object and remove the timestamp field
+  const reportForHash = { ...report };
+  delete reportForHash.timestamp;
+
+  // generate the hash from the JSON string of the report without the timestamp
+  return sha256(JSON.stringify(reportForHash));
+}
+
+function getReportHashFromLocalStorage() {
+  return localStorage.getItem("fgoDropReportHash");
+}
+
+function saveReportHashToLocalStorage(hash) {
+  localStorage.setItem("fgoDropReportHash", hash);
+}
+
 export const ReportButton = () => {
+  const [reportData, setReportData] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
   const { name, twitterId, twitterName, twitterUsername } = useContext(
     UserAttributesContext
   );
@@ -189,6 +219,7 @@ export const ReportButton = () => {
 
   async function AddReport(report) {
     setLoading(true);
+    const newReportHash = createReportHash(report);
     try {
       // ログイン状態によって認証方式を切り替える
       if (name) {
@@ -213,6 +244,8 @@ export const ReportButton = () => {
       });
       setIsReportButtonEnabled(false);
       setIsTweetButtonEnabled(true);
+      // レポートの作成が成功したら、ハッシュ値をローカルストレージに保存する
+      saveReportHashToLocalStorage(newReportHash);
     } catch (error) {
       console.error("Error creating report:", error);
       toast({
@@ -238,18 +271,66 @@ export const ReportButton = () => {
       twitterName
     );
     console.log(reportData);
+    setReportData(reportData);
+    // ハッシュ値を生成し、ローカルストレージのハッシュ値と比較する
+    const newReportHash = createReportHash(reportData);
+    const lastReportHash = getReportHashFromLocalStorage();
+    setLoading(true);
+    if (lastReportHash === newReportHash) {
+      // ハッシュ値が同じ場合、モーダルを開く
+      onOpen();
+      setLoading(false);
+      return;
+    }
     AddReport(reportData);
   };
 
   return (
-    <Button
-      size="sm"
-      colorScheme="twitter"
-      isLoading={loading}
-      onClick={handleClick}
-      isDisabled={!isReportButtonEnabled}
-    >
-      投稿する
-    </Button>
+    <>
+      <Button
+        size="sm"
+        colorScheme="twitter"
+        isLoading={loading}
+        onClick={handleClick}
+        isDisabled={!isReportButtonEnabled}
+      >
+        投稿する
+      </Button>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              重複報告の警告
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              直前に報告された内容と同じです。
+              <br />
+              このまま報告していいですか？
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                キャンセル
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={() => {
+                  AddReport(reportData);
+                  onClose();
+                }}
+                ml={3}
+              >
+                報告する
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
   );
 };
