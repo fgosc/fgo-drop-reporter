@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 
-const defaultQuestName = "(クエスト名)";
+const defaultQuestName = "周回場所";
 
 const QuestNameEditor = memo(({ onQuestNameChange, questname }) => {
   const handleChange = useCallback(
