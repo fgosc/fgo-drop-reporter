@@ -210,7 +210,12 @@ export const ReportButton = () => {
   const toast = useToast();
   useEffect(() => {
     const hasNonEmptyMaterial = lines.some((line) => line.material !== "");
-    if (runs > 0 && questname !== "" && hasNonEmptyMaterial) {
+    if (
+      runs > 0 &&
+      questname !== "" &&
+      questname !== "周回場所" &&
+      hasNonEmptyMaterial
+    ) {
       setIsReportButtonEnabled(true);
     } else {
       setIsReportButtonEnabled(false);
