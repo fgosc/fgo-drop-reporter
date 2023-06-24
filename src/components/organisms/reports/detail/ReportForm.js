@@ -16,6 +16,7 @@ import {
 import ReportTable from "./ReportTable";
 
 const ReportForm = ({
+  isAdmin,
   isEditable,
   questType,
   setQuestType,
@@ -44,7 +45,8 @@ const ReportForm = ({
         <Input
           value={warName}
           onChange={(e) => setWarName(e.target.value)}
-          isReadOnly={!isEditable}
+          isReadOnly={!isAdmin}
+          isEditable={isAdmin}
         />
       </FormControl>
       <FormControl>
@@ -52,7 +54,8 @@ const ReportForm = ({
         <Input
           value={questName}
           onChange={(e) => setQuestName(e.target.value)}
-          isReadOnly={!isEditable}
+          isReadOnly={!isAdmin}
+          isEditable={isAdmin}
         />
       </FormControl>
       <FormControl>

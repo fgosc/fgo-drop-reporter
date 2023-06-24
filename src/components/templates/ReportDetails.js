@@ -37,6 +37,7 @@ const ReportDetails = () => {
   const [note, setNote] = useState("");
   const [dropObjects, setDropObjects] = useState([]);
   const [cognitoId, setCognitoId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -63,6 +64,9 @@ const ReportDetails = () => {
         const user = await Auth.currentAuthenticatedUser();
         const groups =
           user.signInUserSession.accessToken.payload["cognito:groups"];
+        if (groups && groups.includes("Admin")) {
+          setIsAdmin(true);
+        }
         setIsEditable(
           (groups && groups.includes("Admin")) ||
             (reportData.data.getReport &&
@@ -164,6 +168,7 @@ const ReportDetails = () => {
         <VStack spacing={1} align="start">
           <ReportHeader report={report} />
           <ReportForm
+            isAdmin={isAdmin}
             report={report}
             questType={questType}
             setQuestType={setQuestType}

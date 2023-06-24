@@ -86,19 +86,19 @@ function createReportJSON(
   ];
 
   let warName = null;
-  let questName = questname;
+  let questName = questname.replace(/　/g, " ");
 
   for (const normalWarName of normalWarNames) {
-    if (questname.startsWith(normalWarName + " ")) {
-      const splitQuestName = questname.split(" ");
+    if (questName.startsWith(normalWarName + " ")) {
+      const splitQuestName = questName.split(" ");
       warName = splitQuestName[0];
-      questName = splitQuestName.slice(1).join(" ");
+      questName = splitQuestName[1];
       break;
     }
   }
   for (const chaldeaGateWarName of chaldeaGateWarNames) {
-    if (questname.startsWith(chaldeaGateWarName + " ")) {
-      const splitQuestName = questname.split(" ");
+    if (questName.startsWith(chaldeaGateWarName + " ")) {
+      const splitQuestName = questName.split(" ");
       warName = "カルデアゲート";
       break;
     }
