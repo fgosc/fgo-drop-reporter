@@ -21,7 +21,7 @@ const configureAmplify = () => {
   });
 };
 
-const PaginatedReportList = ({ filter }) => {
+const PaginatedReportList = () => {
   const [reports, setReports] = useState([]);
   const [nextToken, setNextToken] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,6 @@ const PaginatedReportList = ({ filter }) => {
       const variables = {
         type: "open",
         sortDirection: "DESC",
-        filter: filter || {},
         nextToken: nextToken || undefined,
       };
 

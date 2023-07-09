@@ -60,6 +60,47 @@ export const listReports = /* GraphQL */ `
     }
   }
 `;
+export const listReportsOwnerTimestamp = /* GraphQL */ `
+  query ListReportsOwnerTimestamp(
+    $owner: String!
+    $timestamp: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelReportFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReportsOwnerTimestamp(
+      owner: $owner
+      timestamp: $timestamp
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        owner
+        name
+        twitterId
+        twitterName
+        twitterUsername
+        type
+        warName
+        questName
+        questType
+        timestamp
+        runs
+        note
+        dropObjects {
+          objectName
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const listReportsSortedByTimestamp = /* GraphQL */ `
   query ListReportsSortedByTimestamp(
     $type: String!

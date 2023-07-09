@@ -8,11 +8,6 @@ import {
   BreadcrumbLink,
   Box,
   Heading,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
 } from "@chakra-ui/react";
 import PagenatedReportListByOwner from "./PagenatedReportListByOwner";
 
@@ -75,25 +70,7 @@ const ReportsListByOwner = () => {
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
-      <Tabs variant="enclosed-colored" colorScheme="teal" m={2}>
-        <TabList>
-          <Tab>全クエスト</Tab>
-          <Tab>通常フリークエスト</Tab>
-          <Tab>イベントフリークエスト</Tab>
-        </TabList>
-
-        <TabPanels>
-          <TabPanel>
-            <PagenatedReportListByOwner />
-          </TabPanel>
-          <TabPanel>
-            <PagenatedReportListByOwner questType="normal" />
-          </TabPanel>
-          <TabPanel>
-            <PagenatedReportListByOwner questType="event" />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <PagenatedReportListByOwner />
     </Box>
   );
 };
