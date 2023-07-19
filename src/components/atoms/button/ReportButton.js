@@ -201,6 +201,8 @@ export const ReportButton = () => {
     runs,
     lines,
     note,
+    reportButtonLabel,
+    setReportButtonLabel,
     isReportButtonEnabled,
     setIsReportButtonEnabled,
     setIsTweetButtonEnabled,
@@ -220,7 +222,13 @@ export const ReportButton = () => {
     } else {
       setIsReportButtonEnabled(false);
     }
-  }, [runs, questname, lines, setIsReportButtonEnabled]);
+    // ログイン状態によって投稿ボタンのラベルを切り替える
+    if (name) {
+      setReportButtonLabel("投稿する");
+    } else {
+      setReportButtonLabel("ゲストとして投稿する");
+    }
+  }, [runs, questname, lines, name, setIsReportButtonEnabled, setReportButtonLabel]);
 
   async function AddReport(report) {
     setLoading(true);
@@ -299,7 +307,7 @@ export const ReportButton = () => {
         onClick={handleClick}
         isDisabled={!isReportButtonEnabled}
       >
-        投稿する
+        {reportButtonLabel}
       </Button>
       <AlertDialog
         isOpen={isOpen}
