@@ -63,10 +63,14 @@ export const Layout = memo(() => {
   }, []);
 
   return (
-    <Flex direction="column" minHeight="100vh">
+    <Flex
+      direction="column"
+      minHeight="100vh"
+      bg={name ? "gray.100" : "defaultColor"}
+    >
       <Flex
         as="nav"
-        bg="teal.500"
+        bg={name ? "teal.500" : "orange.500"}
         color="gray.50"
         align="center"
         justify="space-between"
