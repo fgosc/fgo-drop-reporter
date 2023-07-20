@@ -10,6 +10,7 @@ import TweetButton from "../atoms/button/TweetButton";
 import { ReportButton } from "../atoms/button/ReportButton";
 import ReportParamContext from "../../contexts/ReportParamContext";
 import { useEditBox } from "../../hooks/useEditBox";
+import { MessageArea } from "../atoms/MessageArea";
 
 const EditBox = () => {
   const {
@@ -51,6 +52,7 @@ const EditBox = () => {
       </Box>
       <NoteEditor note={note} onNoteChange={handleNoteChange} />
       <ReportViewer reportText={reportText} />
+      <MessageArea />
       <Stack spacing={2} direction="row" mt={2}>
         <ReportButton />
         <TweetButton reportText={reportText} />
