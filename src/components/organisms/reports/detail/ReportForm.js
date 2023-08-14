@@ -78,7 +78,7 @@ const ReportForm = ({
         <Textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          isReadOnly={!isEditable}
+          isEditable={isEditable}
         />
       </FormControl>
     </>
