@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Amplify, API, graphqlOperation } from "aws-amplify";
 import { useParams, Link as RouterLink } from "react-router-dom";
-import { listReportsSortedByTimestamp } from "../../graphql/queries";
+import { listReportsOwnerTimestamp } from "../../graphql/queries";
 import {
   Box,
   Button,
@@ -33,23 +33,24 @@ const ReportsByOwner = ({ questType }) => {
     setLoading(true);
 
     try {
-      const baseFilter = { owner: { contains: owner } };
+      const baseFilter = {};
       if (questType) {
         baseFilter.questType = { eq: questType };
       }
 
       const variables = {
-        type: "open",
+        // type: "open",
+        owner: owner + "::" + owner,
         sortDirection: "DESC",
         filter: baseFilter,
         nextToken: nextToken || undefined,
       };
 
       const response = await API.graphql(
-        graphqlOperation(listReportsSortedByTimestamp, variables)
+        graphqlOperation(listReportsOwnerTimestamp, variables)
       );
       const { items, nextToken: newNextToken } =
-        response.data.listReportsSortedByTimestamp;
+        response.data.listReportsOwnerTimestamp;
 
       if (items.length === 0) {
         setNextToken(null);

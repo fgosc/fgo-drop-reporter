@@ -8,6 +8,7 @@ export const ReportParamProvider = ({ children }) => {
   const [lines, setLines] = useState([]);
   const [note, setNote] = useState("");
   const [reportText, setReportText] = useState("");
+  const [reportButtonLabel, setReportButtonLabel] = useState("");
   const [isReportButtonEnabled, setIsReportButtonEnabled] = useState(false);
   const [isTweetButtonEnabled, setIsTweetButtonEnabled] = useState(false);
 
@@ -24,6 +25,8 @@ export const ReportParamProvider = ({ children }) => {
         setNote,
         reportText,
         setReportText,
+        reportButtonLabel,
+        setReportButtonLabel,
         isReportButtonEnabled,
         setIsReportButtonEnabled,
         isTweetButtonEnabled,
