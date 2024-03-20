@@ -62,6 +62,7 @@ function createReportJSON(
     "ナウイ・ミクトラン",
     "オーディール・コール",
     "ペーパームーン",
+    "イド",
   ];
 
   const chaldeaGateWarNames = [
