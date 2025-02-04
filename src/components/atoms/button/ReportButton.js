@@ -73,6 +73,7 @@ function createReportJSON(
     "オーディール・コール",
     "ペーパームーン",
     "イド",
+    "アーキタイプ・インセプション",
   ];
 
   const chaldeaGateWarNames = [
@@ -229,7 +230,14 @@ export const ReportButton = () => {
     } else {
       setReportButtonLabel("ゲストとして投稿する");
     }
-  }, [runs, questname, lines, name, setIsReportButtonEnabled, setReportButtonLabel]);
+  }, [
+    runs,
+    questname,
+    lines,
+    name,
+    setIsReportButtonEnabled,
+    setReportButtonLabel,
+  ]);
 
   async function AddReport(report) {
     setLoading(true);
