@@ -23,7 +23,7 @@
         },
         "getUserInfo": {
           "deploymentBucketName": "amplify-fgodropreporter-staging-112936-deployment",
-          "s3Key": "amplify-builds/getUserInfo-434175317a6556786c69-build.zip"
+          "s3Key": "amplify-builds/getUserInfo-49647a73766b342f4c43-build.zip"
         },
         "fgodropreporter": {}
       },
