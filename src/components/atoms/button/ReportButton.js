@@ -74,6 +74,7 @@ function createReportJSON(
     "ペーパームーン",
     "イド",
     "アーキタイプ・インセプション",
+    "トリニティ・メタトロニオス",
   ];
 
   const chaldeaGateWarNames = [
