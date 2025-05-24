@@ -96,7 +96,13 @@ function createReportJSON(
     if (questName.startsWith(normalWarName + " ")) {
       const splitQuestName = questName.split(" ");
       warName = splitQuestName[0];
-      questName = splitQuestName[1];
+      // 冠位戴冠戦の場合のみ、split後の2番目以降の要素を結合する
+      if (normalWarName === "冠位戴冠戦") {
+        questName = splitQuestName.slice(1).join(" ");
+      } else {
+        // それ以外の場合は、split後の2番目の要素のみ
+        questName = splitQuestName[1];
+      }
       break;
     }
   }
