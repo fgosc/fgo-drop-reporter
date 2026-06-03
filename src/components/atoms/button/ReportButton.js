@@ -76,6 +76,7 @@ function createReportJSON(
     "アーキタイプ・インセプション",
     "トリニティ・メタトロニオス",
     "冠位戴冠戦",
+    "運命の三女神編",
   ];
 
   const chaldeaGateWarNames = [
